@@ -1,0 +1,79 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Rocket.shader" type="Shader" id=1]
+[ext_resource path="res://Rocket.gd" type="Script" id=2]
+[ext_resource path="res://sprites/rocket/rocket_frame2_shader.png" type="Texture" id=3]
+[ext_resource path="res://sprites/rocket/rocket_frame3_shader.png" type="Texture" id=4]
+[ext_resource path="res://sprites/rocket/rocket_frame4_shader.png" type="Texture" id=5]
+[ext_resource path="res://sprites/rocket/rocket_frame5_shader.png" type="Texture" id=6]
+[ext_resource path="res://sprites/rocket/rocket_frame_shader.png" type="Texture" id=7]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 1 )
+shader_param/outline = Color( 0.92549, 0.133333, 0.133333, 1 )
+shader_param/fill = Color( 0, 1, 0, 1 )
+shader_param/thrust = Color( 0.133333, 0.0705882, 0.709804, 1 )
+
+[sub_resource type="ShaderMaterial" id=2]
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 4.0
+} ]
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 1 )
+shader_param/outline = Color( 0.501961, 0.501961, 0.501961, 1 )
+shader_param/fill = Color( 0.133333, 0.0705882, 0.709804, 1 )
+shader_param/thrust = null
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 3.81894, 7.45024 )
+
+[node name="Rocket" type="Node2D"]
+material = SubResource( 1 )
+use_parent_material = true
+script = ExtResource( 2 )
+
+[node name="Animation" type="AnimatedSprite" parent="."]
+material = SubResource( 2 )
+use_parent_material = true
+frames = SubResource( 3 )
+frame = 2
+centered = false
+
+[node name="Sprite" type="Sprite" parent="."]
+material = SubResource( 4 )
+use_parent_material = true
+texture = ExtResource( 7 )
+centered = false
+
+[node name="RayCast1" type="RayCast2D" parent="Sprite"]
+enabled = true
+cast_to = Vector2( -10, -150 )
+collision_mask = 2
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="RayCast2" type="RayCast2D" parent="Sprite"]
+enabled = true
+cast_to = Vector2( -100, -150 )
+collision_mask = 2
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.03
+autostart = true
+
+[node name="Rocket" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 1090
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Rocket"]
+position = Vector2( 8.55966, 7.37449 )
+shape = SubResource( 5 )
+[connection signal="area_entered" from="Rocket" to="." method="_on_Rocket_area_entered"]

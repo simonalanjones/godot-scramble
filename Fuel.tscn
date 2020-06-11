@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Fuel_dump.shader" type="Shader" id=1]
+[ext_resource path="res://Fuel_dump.gd" type="Script" id=2]
+[ext_resource path="res://sprites/fuel_dump_shader.png" type="Texture" id=3]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 1 )
+shader_param/tank = Color( 0.133333, 0.0705882, 0.709804, 1 )
+shader_param/ul_chars = Color( 0.113725, 0.764706, 0, 1 )
+shader_param/stand = Color( 0.878431, 0, 0.85098, 1 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 7.89081, 8.08969 )
+
+[node name="Fuel_dump" type="StaticBody2D"]
+material = SubResource( 1 )
+use_parent_material = true
+collision_layer = 16
+collision_mask = 1090
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 8.04388, 7.97805 )
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+use_parent_material = true
+texture = ExtResource( 3 )
+centered = false

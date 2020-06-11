@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://RigidBody2D.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ship.png" type="Texture" id=2]
+[ext_resource path="res://Node.gd" type="Script" id=3]
+[ext_resource path="res://Ship.gd" type="Script" id=4]
+[ext_resource path="res://TileMap.tscn" type="PackedScene" id=5]
+
+[sub_resource type="RectangleShape2D" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 15.7976, 5.73829 )
+
+[node name="MyWorld" type="Node2D"]
+
+[node name="ViewportContainer" type="ViewportContainer" parent="."]
+margin_right = 224.0
+margin_bottom = 256.0
+stretch = true
+
+[node name="RigidBody2D" parent="ViewportContainer" instance=ExtResource( 1 )]
+position = Vector2( 181.136, 46.0247 )
+
+[node name="KinematicBody2D" type="KinematicBody2D" parent="ViewportContainer"]
+
+[node name="Sprite" type="Sprite" parent="ViewportContainer/KinematicBody2D"]
+position = Vector2( 66.7654, 21.9259 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ViewportContainer/KinematicBody2D"]
+position = Vector2( 66.5679, 22.5185 )
+shape = SubResource( 2 )
+
+[node name="Node" type="Node2D" parent="ViewportContainer"]
+script = ExtResource( 3 )
+
+[node name="Ship" type="Sprite" parent="ViewportContainer/Node"]
+position = Vector2( 51.5555, 52.8889 )
+texture = ExtResource( 2 )
+script = ExtResource( 4 )
+
+[node name="Area2D" type="Area2D" parent="ViewportContainer/Node/Ship"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ViewportContainer/Node/Ship/Area2D"]
+position = Vector2( -0.197525, 0.395061 )
+shape = SubResource( 1 )
+
+[node name="Camera2D_0" type="Camera2D" parent="ViewportContainer/Node/Ship"]
+position = Vector2( 60.9445, 75.3611 )
+drag_margin_h_enabled = false
+drag_margin_v_enabled = false
+
+[node name="Viewport2" type="Viewport" parent="ViewportContainer"]
+size = Vector2( 224, 256 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="TileMap" parent="ViewportContainer/Viewport2" instance=ExtResource( 5 )]
+[connection signal="area_entered" from="ViewportContainer/Node/Ship/Area2D" to="ViewportContainer/Node/Ship" method="_on_Area2D_area_entered"]
+[connection signal="area_shape_entered" from="ViewportContainer/Node/Ship/Area2D" to="ViewportContainer/Node/Ship" method="_on_Area2D_area_shape_entered"]
