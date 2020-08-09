@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scripts/Ufo.gd" type="Script" id=1]
+[ext_resource path="res://sprites/ufo.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 5.9711, 3.54412 )
+
+[node name="Ufo" type="KinematicBody2D"]
+collision_layer = 256
+collision_mask = 1090
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 6.06737, 3.38485 )
+shape = SubResource( 1 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+position = Vector2( 5.99547, 3.66389 )
+scale = Vector2( 0.633611, 0.367146 )
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

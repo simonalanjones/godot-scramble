@@ -7,7 +7,7 @@ onready var velocity = Vector2()
 var left_boundary_reached = false
 var right_boundary_reached = false
 
-const Bomb_scene = preload("res://Bomb.tscn")
+const Bomb_scene = preload("res://scenes/Bomb.tscn")
 const Bullet_scene = preload("res://Bullet_k2d.tscn")
 
 func _ready():
