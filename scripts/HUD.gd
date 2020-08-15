@@ -5,25 +5,28 @@ onready var lives:int = 3
 
 func _ready():
 	show_lives()
+	$Player_one_label.visible = false
+	$Game_over_label.visible = false
+	
 
 func show_lives()->void:
 	match lives:
 		0,1:
-			$ship_1.visible = false
-			$ship_2.visible = false
-			$ship_3.visible = false
+			$Lower_hud/ship_1.visible = false
+			$Lower_hud/ship_2.visible = false
+			$Lower_hud/ship_3.visible = false
 		2:
-			$ship_1.visible = true
-			$ship_2.visible = false
-			$ship_3.visible = false
+			$Lower_hud/ship_1.visible = true
+			$Lower_hud/ship_2.visible = false
+			$Lower_hud/ship_3.visible = false
 		3:
-			$ship_1.visible = true
-			$ship_2.visible = true
-			$ship_3.visible = false			
+			$Lower_hud/ship_1.visible = true
+			$Lower_hud/ship_2.visible = true
+			$Lower_hud/ship_3.visible = false			
 		4:
-			$ship_1.visible = true
-			$ship_2.visible = true
-			$ship_3.visible = true
+			$Lower_hud/ship_1.visible = true
+			$Lower_hud/ship_2.visible = true
+			$Lower_hud/ship_3.visible = true
 	
 
 func lose_life()->void:
@@ -36,3 +39,24 @@ func lose_life()->void:
 func extra_life()->void:
 	lives += 1
 	show_lives()
+	
+	
+func switch_to_game_over():
+	hide_stage_board()
+	$Player_one_label.visible = true
+	$Game_over_label.visible = true
+	#$Score_board.disable_1up_blink()
+
+func switch_to_high_scores():
+	$Player_one_label.visible = false
+	$Game_over_label.visible = false
+	$Lower_hud.visible = false
+	$Highscore_board.display_on()
+	
+	
+func hide_stage_board():
+	$Stage_board.visible = false
+	
+	
+func show_stage_board():
+	$Stage_board.visible = true

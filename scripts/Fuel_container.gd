@@ -11,7 +11,12 @@ func _ready():
 	get_material().set_shader_param("stand", colours.red)
 	get_material().set_shader_param("ul_chars", colours.blue_haze)	
 	get_material().set_shader_param("tank", colours.pink)
-		
+
+
+func remove_fuel()->void:
+	for child in get_children():
+		child.queue_free()
+				
 	
 func setup():
 	for child in get_children():

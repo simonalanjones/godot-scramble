@@ -30,7 +30,7 @@ animations = [ {
 
 [node name="Bomb" type="KinematicBody2D"]
 collision_layer = 64
-collision_mask = 184
+collision_mask = 2232
 script = ExtResource( 10 )
 
 [node name="Collidor" type="CollisionShape2D" parent="."]

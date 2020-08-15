@@ -7,13 +7,7 @@ onready var Rocket_scene:PackedScene = preload("res://scenes/Rocket_k2d.tscn")
 onready var timer_var:int = 0
 onready var launch_enabled:bool = true
 
-# contains reference to camera
-#var camera_property
-# function to access tilemap camera
-#func get_camera_position() -> Vector2:
-#	return camera_property.call_func()
-	
-	
+
 func _ready()->void:
 	# init colours before next colour swap
 	get_material().set_shader_param("fill", colours.red)
@@ -24,8 +18,7 @@ func _ready()->void:
 # connected via signal when landscape draw complete
 func setup()->void:
 	# clear any previous rockets
-	for child in get_children():
-		child.queue_free()
+	remove_rockets()
 		
 	# get rocket positions from landscape generator
 	var positions = Landscape_manager.get_rocket_positions()
@@ -38,6 +31,11 @@ func setup()->void:
 			add_child(rocket)
 			
 			
+func remove_rockets()->void:
+	for child in get_children():
+		child.queue_free()
+		
+		
 func enable_rockets()->void:
 	launch_enabled = true
 	
@@ -47,7 +45,6 @@ func disable_rockets()->void:
 	
 	
 func _process(_delta)->void:
-	#print('camera:' + str(get_camera_position().x))
 	if launch_enabled == true:
 		launch_next_rocket()
 		

@@ -28,6 +28,9 @@ margin_right = 40.0
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 1 )
 text = "1UP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="label_text_high_score" type="Label" parent="."]
 margin_left = 56.0
@@ -36,6 +39,9 @@ margin_right = 136.0
 margin_bottom = 9.0
 custom_fonts/font = SubResource( 2 )
 text = "HIGH SCORE"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="label_value_score" type="Label" parent="."]
 margin_top = 10.0
@@ -46,13 +52,16 @@ custom_colors/font_color = Color( 1, 1, 0, 1 )
 text = "00000"
 
 [node name="label_value_high_score" type="Label" parent="."]
-margin_left = 76.0
-margin_top = 11.0
-margin_right = 116.0
-margin_bottom = 19.0
+margin_left = 76.6718
+margin_top = 10.3283
+margin_right = 116.672
+margin_bottom = 18.3283
 custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 1, 1, 0, 1 )
 text = "00000"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.37

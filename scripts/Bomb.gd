@@ -4,7 +4,7 @@ var path = PoolVector3Array()
 var anim_counter = 0
 
 # this should come in as a dependancy injection?
-onready var Explosion_container = get_tree().get_root().get_node("World/Explosion_container")
+onready var Explosion_container = get_tree().get_root().get_node("World/Containers/Explosion_container")
 
 
 # array holds x,y vectors and frame number of the animated sprite
@@ -72,7 +72,7 @@ func _process(_delta):
 		var x_offset = _path[0]
 		var y_offset = _path[1]
 			
-		#add 1 to x when to account for camera moving away from sprite
+		#add 1 to x to account for camera moving away from sprite
 		var movement = Vector2(x_offset+1,y_offset)
 		var frame = int(_path[2])
 		$Falling_animation.set_frame(frame)

@@ -6,7 +6,7 @@
 [ext_resource path="res://sprites/points/100_points.png" type="Texture" id=5]
 [ext_resource path="res://scripts/Mystery.gd" type="Script" id=6]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8.09252, 7.92961 )
 
 [node name="Mystery" type="StaticBody2D"]
@@ -17,7 +17,7 @@ script = ExtResource( 6 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 8.07682, 7.99878 )
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 use_parent_material = true

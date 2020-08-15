@@ -10,7 +10,7 @@ var spawn_position:Vector2 = Vector2(10,80)
 var scroll_time:float = 0
 
 const Bomb_scene = preload("res://scenes/Bomb.tscn")
-const Bullet_scene = preload("res://Bullet_k2d.tscn")
+const Bullet_scene = preload("res://scenes/Bullet_k2d.tscn")
 
 func _ready()->void:
 	set_global_position(spawn_position)

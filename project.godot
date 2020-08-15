@@ -63,9 +63,7 @@ pause={
 
 [layer_names]
 
-2d_physics/layer_1="screen edge"
 2d_physics/layer_2="ship"
-2d_physics/layer_3="rocket ray"
 2d_physics/layer_4="landscape"
 2d_physics/layer_5="fuel dump"
 2d_physics/layer_6="rocket"
@@ -74,6 +72,7 @@ pause={
 2d_physics/layer_9="ufo"
 2d_physics/layer_10="fireball"
 2d_physics/layer_11="player shot"
+2d_physics/layer_12="base"
 
 [rendering]
 

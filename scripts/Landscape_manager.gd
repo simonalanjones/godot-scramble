@@ -6,6 +6,7 @@ signal landscape_decoded
 var rocket_positions:Array = []
 var fuel_positions:Array = []
 var mystery_positions:Array = []
+var base_positions:Array = []
 var landscape_data:Array = []
 
 var xpos:int = 0
@@ -20,6 +21,7 @@ func restart(stage)->void:
 	rocket_positions.clear()
 	fuel_positions.clear()
 	mystery_positions.clear()
+	base_positions.clear()
 	
 	#clear previous tilemap landscape data
 	landscape_data.clear()
@@ -164,6 +166,7 @@ func add_ground_target(target_id,x_pos,y_pos)->void:
 		1: rocket_positions.append(Vector2(x_pos,y_pos))
 		2: fuel_positions.append(Vector2(x_pos,y_pos))
 		4: mystery_positions.append(Vector2(x_pos,y_pos))
+		8: base_positions.append(Vector2(x_pos,y_pos))
 		
 		
 # return a tilemap id from scramble character code
@@ -204,6 +207,10 @@ func get_mystery_positions()->Array:
 	
 func get_fuel_positions()->Array:
 	return fuel_positions
+	
+	
+func get_base_positions()->Array:
+	return mystery_positions
 	
 	
 func get_landscape()->Array:

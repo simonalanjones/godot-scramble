@@ -4,6 +4,10 @@ extends Node
 # don't forget to use stretch mode 'viewport' and aspect 'ignore'
 onready var viewport = get_viewport()
 onready var is_scrolling:bool = false
+onready var is_game_over:bool = false
+
+# need signal to wire this flag up (shoot base)
+onready var is_mission_complete:bool = false
 
 func _screen_resized():
 	var window_size = OS.get_window_size()
@@ -22,13 +26,15 @@ func _screen_resized():
 	# attach the viewport to the rect we calculated
 	viewport.set_attach_to_screen_rect(Rect2(diffhalf, viewport.size * scale))
 
+onready var Containers = get_node("/root/World/Containers");
 onready var Colour_manager = get_node("/root/World/Colour_manager")
-onready var Rocket_container = get_node("/root/World/Rocket_container")
-onready var Fuel_container = get_node("/root/World/Fuel_container")
-onready var Mystery_container = get_node("/root/World/Mystery_container")
-onready var Ufo_container = get_node("/root/World/Ufo_container")
-onready var Fireball_container = get_node("/root/World/Fireball_container")
-onready var Explosion_container = get_node("/root/World/Explosion_container")
+onready var Rocket_container = get_node("/root/World/Containers/Rocket_container")
+onready var Fuel_container = get_node("/root/World/Containers/Fuel_container")
+onready var Mystery_container = get_node("/root/World/Containers/Mystery_container")
+onready var Ufo_container = get_node("/root/World/Containers/Ufo_container")
+onready var Fireball_container = get_node("/root/World/Containers/Fireball_container")
+onready var Explosion_container = get_node("/root/World/Containers/Explosion_container")
+onready var Base_container = get_node("/root/World/Containers/Base_container")
 
 onready var Tilemap = get_node("/root/World/Tilemap")
 
@@ -36,10 +42,11 @@ onready var Land_manager = get_node("/root/World/Landscape_manager")
 
 onready var Stage_board = get_node("/root/World/HUD/Stage_board")
 onready var Score_board = get_node("/root/World/HUD/Score_board")
-onready var Fuel_bar = get_node("/root/World/HUD/Fuel_bar")
+onready var Fuel_bar = get_node("/root/World/HUD/Lower_hud/Fuel_bar")
 onready var HUD = get_node("/root/World/HUD")
 onready var Ship = get_node("/root/World/Ship")
 onready var camera = get_node("/root/World/Tilemap/Camera2D")
+onready var Highscore_board = get_node("/root/World/HUD/Highscore_board")
 
 var missions_completed = 0
 
@@ -52,14 +59,19 @@ func _ready()->void:
 	
 	Fuel_bar.connect("fuel_depleted", Ship, "fuel_has_depleted")
 	HUD.connect("lives_depleted", self, "game_over")
+	
+	HUD.connect("lives_depleted", Colour_manager, "disable")
+	HUD.connect("lives_depleted", Score_board, "submit_highscore")
+	
 	Score_board.connect("extra_life_awarded", HUD, "extra_life")
 	
 	Ship.connect("ship_was_hit", self, "ship_was_hit")
 	Ship.connect("ship_was_hit", Fuel_bar, "stop") 
 	Ship.connect("ship_was_hit", Colour_manager, "flash_colours")
 	
-	Ship.connect("crash_animation_complete", self, "stage_restart")
 	Ship.connect("crash_animation_complete", HUD, "lose_life")
+	Ship.connect("crash_animation_complete", self, "stage_restart",[],1) # deferred
+	
 	Ship.connect("crash_animation_complete", Colour_manager, "clear_flash_colours")
 	Ship.connect("second_timeout", Score_board, "add_score",[10])
 
@@ -67,6 +79,7 @@ func _ready()->void:
 	Land_manager.connect('landscape_decoded', Rocket_container, 'setup')
 	Land_manager.connect('landscape_decoded', Fuel_container, 'setup')
 	Land_manager.connect('landscape_decoded', Mystery_container, 'setup')
+	Land_manager.connect('landscape_decoded', Base_container, 'setup')
 		
 	Colour_manager.connect("colours_did_change", Tilemap, "change_colours")
 	Colour_manager.connect("colours_did_change", Rocket_container, "change_colours")
@@ -78,13 +91,17 @@ func _ready()->void:
 	Fuel_container.connect("fuel_was_hit", Fuel_bar, "restore")
 	Rocket_container.connect("rocket_was_hit", Score_board, "add_score") 
 	Mystery_container.connect("mystery_was_hit",Score_board, "add_score")
+	Base_container.connect("base_was_hit",Score_board, "add_score")
 	
 	Tilemap.connect("landscape_draw_completed", self, "begin")
 	
+	# add access to the cameras position in ufo container  
 	Ufo_container.camera_property = funcref(camera, "get_camera_position")
-	#Rocket_container.camera_property = funcref(camera, "get_camera_position") # for testing
 	
-	
+	# add access to the highscore functions from within score board
+	Score_board.highscore_property = funcref(Highscore_board, "get_highscore")
+	Score_board.submit_highscore_property = funcref(Highscore_board, "submit_score")
+
 	Land_manager.setup(1)
 	
 
@@ -102,17 +119,30 @@ func _process(_delta)->void:
 	
 	
 func game_over()->void:
-	print('GAME OVER')
+	VisualServer.set_default_clear_color("000000")
+	is_game_over = true
+	
+	Ship.visible = false
+	# remove rockets/fuel/mysterys/ufos/base/fireballs/explosions
+	for container in Containers.get_children():
+		for child in container.get_children():
+			child.queue_free()
+			
+	Tilemap.clear_landscape()
+	HUD.switch_to_game_over()
+	yield(get_tree().create_timer(2), "timeout")
+	HUD.switch_to_high_scores()
 
 
 func stage_restart()->void:
-	is_scrolling = true
-	camera.set_position(Vector2.ZERO)
-	Land_manager.restart(Stage_board.get_active_stage())
+	if is_game_over == false:
+		is_scrolling = true
+		camera.set_position(Vector2.ZERO)
+		Land_manager.restart(Stage_board.get_active_stage())
 	
-	Fuel_bar.reset()
-	Fuel_bar.start()
-	Ship.reset()
+		Fuel_bar.reset()
+		Fuel_bar.start()
+		Ship.reset()
 		
 	
 func stage1_end()->void:	

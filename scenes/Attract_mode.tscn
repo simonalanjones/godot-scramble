@@ -1,0 +1,334 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://scenes/Highscore_board.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/Attract_mode.gd" type="Script" id=2]
+[ext_resource path="res://scenes/Score_board.tscn" type="PackedScene" id=3]
+[ext_resource path="res://PressStart2P-vaV7.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://sprites/fuel_dump_shader.png" type="Texture" id=5]
+[ext_resource path="res://sprites/rocket/rocket_frame_shader.png" type="Texture" id=6]
+[ext_resource path="res://sprites/ufo.png" type="Texture" id=7]
+[ext_resource path="res://sprites/base/base_frame1_shader.png" type="Texture" id=8]
+[ext_resource path="res://sprites/mystery_shader.png" type="Texture" id=9]
+[ext_resource path="res://shaders/Rocket.shader" type="Shader" id=10]
+[ext_resource path="res://shaders/Fuel_dump.shader" type="Shader" id=11]
+[ext_resource path="res://shaders/Mystery.shader" type="Shader" id=12]
+[ext_resource path="res://sprites/rocket/rocket_frame5_shader.png" type="Texture" id=13]
+
+[sub_resource type="DynamicFont" id=1]
+size = 8
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 8
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[sub_resource type="ShaderMaterial" id=3]
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 10 )
+shader_param/outline = Color( 1, 0, 0, 1 )
+shader_param/fill = Color( 0, 1, 0, 1 )
+shader_param/thrust = Color( 0, 0, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = ExtResource( 11 )
+shader_param/tank = Color( 44.2411, 0, 58.38, 1 )
+shader_param/ul_chars = Color( 0, 0, 0.901961, 1 )
+shader_param/stand = Color( 0.87, 0, 0, 1 )
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 12 )
+shader_param/left = Color( 1, 0, 0, 1 )
+shader_param/right = Color( 0, 1, 0, 1 )
+shader_param/middle = Color( 0, 0, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=8]
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = ExtResource( 10 )
+shader_param/outline = Color( 1, 0, 0, 1 )
+shader_param/fill = Color( 0, 1, 0, 1 )
+shader_param/thrust = Color( 0, 0, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=10]
+shader = ExtResource( 12 )
+shader_param/left = Color( 1, 0, 0, 1 )
+shader_param/right = Color( 0, 1, 0, 1 )
+shader_param/middle = Color( 0, 0, 1, 1 )
+
+[node name="Attract_mode" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Highscore_board" parent="." instance=ExtResource( 1 )]
+
+[node name="Intro" type="Node2D" parent="."]
+visible = false
+
+[node name="Play_label" type="Label" parent="Intro"]
+margin_left = 99.0229
+margin_top = 73.5309
+margin_right = 131.023
+margin_bottom = 81.5309
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 1, 1, 0, 1 )
+text = "PLAY"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Scramble_label" type="Label" parent="Intro"]
+margin_left = 68.0618
+margin_top = 97.5309
+margin_right = 164.062
+margin_bottom = 105.531
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0, 0.764706, 0.85098, 1 )
+text = "- SCRAMBLE -"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="How_far_invade_label" type="Label" parent="Intro"]
+margin_left = 26.3112
+margin_top = 144.593
+margin_right = 202.311
+margin_bottom = 152.593
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.878431, 0.239216, 0, 1 )
+text = "HOW FAR CAN YOU INVADE"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="How_far_invade_label2" type="Label" parent="Intro"]
+margin_left = 31.1602
+margin_top = 168.531
+margin_right = 199.16
+margin_bottom = 176.531
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.878431, 0.239216, 0, 1 )
+text = "OUR SCRAMBLE SYSTEM ?"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Konami_1981_label" type="Label" parent="Intro"]
+margin_left = 64.1364
+margin_top = 222.494
+margin_right = 160.136
+margin_bottom = 230.494
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "KONAMI 1981 "
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score_table" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="Score_table"]
+margin_left = 40.0
+margin_top = 49.0
+margin_right = 160.0
+margin_bottom = 57.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.878431, 0.878431, 0, 1 )
+text = "- SCORE TABLE -"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Score_table"]
+margin_left = 113.0
+margin_top = 74.0
+margin_right = 161.0
+margin_bottom = 82.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "50 PTS"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label5" type="Label" parent="Score_table"]
+margin_left = 75.0
+margin_top = 73.0
+margin_right = 99.0
+margin_bottom = 81.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "..."
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label6" type="Label" parent="Score_table"]
+margin_left = 75.4259
+margin_top = 98.2012
+margin_right = 99.4259
+margin_bottom = 106.201
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "..."
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label7" type="Label" parent="Score_table"]
+margin_left = 75.4259
+margin_top = 121.201
+margin_right = 99.4259
+margin_bottom = 129.201
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "..."
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label8" type="Label" parent="Score_table"]
+margin_left = 75.4259
+margin_top = 147.201
+margin_right = 99.4259
+margin_bottom = 155.201
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "..."
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label9" type="Label" parent="Score_table"]
+margin_left = 75.4259
+margin_top = 173.201
+margin_right = 99.4259
+margin_bottom = 181.201
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "..."
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label10" type="Label" parent="Score_table"]
+margin_left = 75.4259
+margin_top = 201.201
+margin_right = 99.4259
+margin_bottom = 209.201
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "..."
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="Score_table"]
+margin_left = 113.0
+margin_top = 97.0
+margin_right = 161.0
+margin_bottom = 105.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "80 PTS"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label4" type="Label" parent="Score_table"]
+margin_left = 105.0
+margin_top = 122.0
+margin_right = 161.0
+margin_bottom = 130.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "100 PTS"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label11" type="Label" parent="Score_table"]
+margin_left = 105.0
+margin_top = 149.0
+margin_right = 161.0
+margin_bottom = 157.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "150 PTS"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label12" type="Label" parent="Score_table"]
+margin_left = 105.0
+margin_top = 175.0
+margin_right = 161.0
+margin_bottom = 183.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "800 PTS"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label13" type="Label" parent="Score_table"]
+margin_left = 105.0
+margin_top = 202.0
+margin_right = 161.0
+margin_bottom = 210.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "MYSTERY"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="score_items" type="Node2D" parent="Score_table"]
+material = SubResource( 3 )
+
+[node name="rocket1" type="Sprite" parent="Score_table/score_items"]
+material = SubResource( 4 )
+position = Vector2( 58, 78.387 )
+texture = ExtResource( 6 )
+
+[node name="fuel" type="Sprite" parent="Score_table/score_items"]
+material = SubResource( 6 )
+position = Vector2( 58, 152.457 )
+texture = ExtResource( 5 )
+
+[node name="mystery" type="Sprite" parent="Score_table/score_items"]
+material = SubResource( 7 )
+position = Vector2( 58, 205.591 )
+texture = ExtResource( 9 )
+
+[node name="ufo" type="Sprite" parent="Score_table/score_items"]
+material = SubResource( 8 )
+position = Vector2( 58, 129 )
+texture = ExtResource( 7 )
+
+[node name="rocket_frame2" type="Sprite" parent="Score_table/score_items"]
+material = SubResource( 9 )
+position = Vector2( 58, 104.527 )
+texture = ExtResource( 13 )
+
+[node name="base" type="Sprite" parent="Score_table/score_items"]
+material = SubResource( 10 )
+position = Vector2( 58, 179.467 )
+texture = ExtResource( 8 )
+
+[node name="Score_board" parent="." instance=ExtResource( 3 )]
+position = Vector2( 16, 0 )

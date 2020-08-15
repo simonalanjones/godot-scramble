@@ -21,18 +21,27 @@ var colour_counter:int = 0
 
 var flash_counter:int = 0
 var flash_effect:bool = false
+var enabled:bool = true
 
 func _process(delta):
-	if flash_effect == true:
-		flash_counter += 1
-		if flash_counter == 3:
-			change_colour()
-			flash_counter = 0
-	else:
-		colour_timer += delta
-		if colour_timer > 3:
-			colour_timer = 0
-			change_colour()
+	if enabled == true:
+		if flash_effect == true:
+			flash_counter += 1
+			if flash_counter == 3:
+				change_colour()
+				flash_counter = 0
+		else:
+			colour_timer += delta
+			if colour_timer > 3:
+				colour_timer = 0
+				change_colour()
+
+
+func disable():
+	enabled = false
+	
+func enable():
+	enabled = true
 	
 	
 func flash_colours():

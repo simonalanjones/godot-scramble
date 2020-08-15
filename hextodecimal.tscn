@@ -5,10 +5,10 @@
 [ext_resource path="res://sprites/tilemap/fuel_dump.png" type="Texture" id=4]
 [ext_resource path="res://sprites/tilemap/mystery.png" type="Texture" id=5]
 
-[sub_resource type="StreamTexture" id=2]
+[sub_resource type="StreamTexture" id=1]
 load_path = "res://.import/rocket.png-7f887c9206053f4bbde4ab3c70c58327.stex"
 
-[sub_resource type="TileSet" id=1]
+[sub_resource type="TileSet" id=2]
 1/name = "shapes_trim.png 1"
 1/texture = ExtResource( 2 )
 1/tex_offset = Vector2( 0, 0 )
@@ -24,7 +24,7 @@ load_path = "res://.import/rocket.png-7f887c9206053f4bbde4ab3c70c58327.stex"
 1/shapes = [  ]
 1/z_index = 0
 2/name = "rocket.png 2"
-2/texture = SubResource( 2 )
+2/texture = SubResource( 1 )
 2/tex_offset = Vector2( 0, 0 )
 2/modulate = Color( 1, 1, 1, 1 )
 2/region = Rect2( 0, 0, 8, 16 )
@@ -70,6 +70,6 @@ load_path = "res://.import/rocket.png-7f887c9206053f4bbde4ab3c70c58327.stex"
 script = ExtResource( 1 )
 
 [node name="TileMap" type="TileMap" parent="."]
-tile_set = SubResource( 1 )
+tile_set = SubResource( 2 )
 cell_size = Vector2( 8, 8 )
 format = 1

@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 onready var speed = 250
 # this should come in as a dependancy injection?
-onready var Explosion_container = get_tree().get_root().get_node("World/Explosion_container")
+onready var Explosion_container = get_tree().get_root().get_node("World/Containers/Explosion_container")
 
 
 func _process(delta):	
