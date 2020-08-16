@@ -40,6 +40,22 @@ func extra_life()->void:
 	lives += 1
 	show_lives()
 	
+func switch_on_mission_complete():
+	hide_stage_board()
+	$Player_one_label.visible = false
+	$Game_over_label.visible = false
+	$Highscore_board.display_off()
+	$Congrations_screen.visible = true
+	
+
+func switch_off_mission_complete():
+	show_stage_board()
+	$Lower_hud/Flag_holder.flag_earned()
+	$Player_one_label.visible = false
+	$Game_over_label.visible = false
+	$Highscore_board.display_off()
+	$Congrations_screen.visible = false
+	
 	
 func switch_to_game_over():
 	hide_stage_board()

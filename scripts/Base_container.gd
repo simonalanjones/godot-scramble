@@ -39,6 +39,7 @@ func _on_base_hit(points)->void:
 		
 		
 func change_colours(colours)->void:
+	#print(colours)
 	get_material().set_shader_param("left", colours["third_colour"])
 	get_material().set_shader_param("right", colours["outline_colour"])	
 	get_material().set_shader_param("middle", colours["fill_colour"])

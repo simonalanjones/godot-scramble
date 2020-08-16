@@ -23,15 +23,21 @@ func fuel_has_depleted()->void:
 
 func reset()->void:
 	set_global_position(spawn_position)
+	visible = true
+	scroll_time = 0
+	enabled = true
+	fuel_depleted = false
+	
+
+func disable()->void:
+	enabled = false
+	
+func enable()->void:
 	scroll_time = 0
 	enabled = true
 	
 	
 func _process(delta)->void:
-	
-	#var global_pos = get_global_transform()
-	#var x = 224 + global_pos.origin.x
-	#print(x)
 		
 	# every one second moving add 10 points
 	if enabled == true:
@@ -79,9 +85,9 @@ func _process(delta)->void:
 func _on_Area2D_body_shape_entered(_body_id, _body, _body_shape, _area_shape)->void:
 	if enabled == true:
 		$Sprite.speed_scale = 4
-		$Sprite.play('crash')
-		emit_signal('ship_was_hit')
-		enabled = false
+		#$Sprite.play('crash')
+		#emit_signal('ship_was_hit')
+		#enabled = false
 		
 		
 func _on_Sprite_animation_finished()->void:

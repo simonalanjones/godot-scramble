@@ -174,6 +174,7 @@ func get_tile(id)->int:
 	if id in tile_translations:
 		return tile_translations[id]
 	else:
+		print(id)
 		return 14
 		
 		
@@ -193,7 +194,8 @@ func get_data_for_stage(stage)->Array:
 var tile_translations = {
 	1:2, 2:3, 4:4, 16:14, 44:1, 45:4, 46:0, 47:2, 48:5, 49:7, 50:3, 51:6,
 	52:9, 53:11, 54:8, 58:12, 92:25, 93:27, 94:24, 96:29, 97:31, 98:28,
-	99:30,209:33
+	99:30,209:33, 
+	31:36, 27:35, 17:38, 30:37, 25:40, 29:39
 }
 
 

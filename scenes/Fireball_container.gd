@@ -7,6 +7,13 @@ onready var enabled = false
 onready var Fireball_scene = preload("res://scenes/Fireball.tscn")
 onready var timer = 0
 
+# contains a reference to the tilemap camera - injected by World.gd
+var camera_property
+
+# function to access tilemap camera
+func get_camera_position() -> Vector2:
+	return camera_property.call_func()
+	
 
 func enable():
 	enabled = true
@@ -32,7 +39,6 @@ func spawn_fireball():
 		randomize()
 		var y = randi() % 115
 		y += 45
-		var camera_x = $"../Tilemap/Camera2D".get_camera_position().x
-		var x = 224 + camera_x
+		var x = 224 + get_camera_position().x
 		fireball.position = Vector2(x,y)
 		add_child(fireball)

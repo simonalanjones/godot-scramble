@@ -31,7 +31,7 @@ func _process(_delta):
 	fuel_drain_counter += 1
 	if fuel_drain_counter == calc_drain_rate():
 		fuel_drain_counter = 0
-		deplete()
+		#deplete()
 		update()
 		
 	

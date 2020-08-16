@@ -17,13 +17,15 @@ animations = [ {
 extents = Vector2( 7.78963, 7.69696 )
 
 [node name="Base" type="StaticBody2D"]
+use_parent_material = true
+position = Vector2( 0, -1 )
 collision_layer = 2048
 collision_mask = 1090
 script = ExtResource( 4 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+use_parent_material = true
 frames = SubResource( 1 )
-frame = 1
 playing = true
 centered = false
 

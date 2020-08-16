@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://scripts/HUD.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Colour_manager.gd" type="Script" id=2]
@@ -9,11 +9,12 @@
 [ext_resource path="res://scripts/Rocket_container.gd" type="Script" id=7]
 [ext_resource path="res://scenes/Highscore_board.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/Fireball_container.gd" type="Script" id=9]
-[ext_resource path="res://sprites/hud/flag.png" type="Texture" id=10]
 [ext_resource path="res://TileMap.tres" type="TileSet" id=11]
 [ext_resource path="res://scripts/Base_container.gd" type="Script" id=12]
 [ext_resource path="res://scenes/Landscape2.gd" type="Script" id=13]
+[ext_resource path="res://scripts/Congrations_screen.gd" type="Script" id=14]
 [ext_resource path="res://PressStart2P-vaV7.ttf" type="DynamicFontData" id=15]
+[ext_resource path="res://scripts/Flag_holder.gd" type="Script" id=16]
 [ext_resource path="res://shaders/Rocket.shader" type="Shader" id=17]
 [ext_resource path="res://scenes/Score_board.tscn" type="PackedScene" id=19]
 [ext_resource path="res://scenes/Stage_board.tscn" type="PackedScene" id=20]
@@ -83,6 +84,10 @@ size = 8
 font_data = ExtResource( 15 )
 
 [sub_resource type="DynamicFont" id=12]
+size = 8
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=15]
 size = 8
 font_data = ExtResource( 15 )
 
@@ -178,15 +183,11 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="flag_complete" type="Sprite" parent="HUD/Lower_hud"]
-position = Vector2( 219.878, 252.359 )
-texture = ExtResource( 10 )
-__meta__ = {
-"_edit_lock_": true
-}
-
 [node name="Fuel_bar" parent="HUD/Lower_hud" instance=ExtResource( 21 )]
 position = Vector2( 63.263, 239.733 )
+
+[node name="Flag_holder" type="Node2D" parent="HUD/Lower_hud"]
+script = ExtResource( 16 )
 
 [node name="Stage_board" parent="HUD" instance=ExtResource( 20 )]
 position = Vector2( 16, 24 )
@@ -218,7 +219,48 @@ __meta__ = {
 }
 
 [node name="Highscore_board" parent="HUD" instance=ExtResource( 8 )]
+visible = false
 position = Vector2( 0, 20 )
+
+[node name="Congrations_screen" type="Node2D" parent="HUD"]
+visible = false
+script = ExtResource( 14 )
+
+[node name="Congratulations_label" type="Label" parent="HUD/Congrations_screen"]
+margin_left = 51.2588
+margin_top = 102.145
+margin_right = 171.259
+margin_bottom = 116.145
+custom_fonts/font = SubResource( 15 )
+custom_colors/font_color = Color( 0.878431, 0.239216, 0, 1 )
+text = "CONGRATULATIONS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Completed_duties_label" type="Label" parent="HUD/Congrations_screen"]
+margin_left = 12.6707
+margin_top = 118.721
+margin_right = 212.671
+margin_bottom = 132.721
+custom_fonts/font = SubResource( 15 )
+custom_colors/font_color = Color( 0.878431, 0.878431, 0, 1 )
+text = "YOU COMPLETED YOUR DUTIES"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Good_luck_label" type="Label" parent="HUD/Congrations_screen"]
+margin_left = 12.6707
+margin_top = 134.721
+margin_right = 212.671
+margin_bottom = 148.721
+custom_fonts/font = SubResource( 15 )
+custom_colors/font_color = Color( 0, 0.764706, 0.85098, 1 )
+text = "GOOD LUCK NEXT TIME AGAIN"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Bullets" type="Node" parent="."]
 

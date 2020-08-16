@@ -1,13 +1,14 @@
 extends Node
-
+signal mission_completed
 
 # don't forget to use stretch mode 'viewport' and aspect 'ignore'
 onready var viewport = get_viewport()
 onready var is_scrolling:bool = false
 onready var is_game_over:bool = false
+onready var missions_completed = 0 # needed to instruct speed of fuel bar
 
 # need signal to wire this flag up (shoot base)
-onready var is_mission_complete:bool = false
+#onready var is_mission_complete:bool = false
 
 func _screen_resized():
 	var window_size = OS.get_window_size()
@@ -48,7 +49,6 @@ onready var Ship = get_node("/root/World/Ship")
 onready var camera = get_node("/root/World/Tilemap/Camera2D")
 onready var Highscore_board = get_node("/root/World/HUD/Highscore_board")
 
-var missions_completed = 0
 
 func _ready()->void:	
 	VisualServer.set_default_clear_color("000000") #background set to black
@@ -56,7 +56,7 @@ func _ready()->void:
 	#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	var _a = get_tree().connect("screen_resized", self, "_screen_resized")
 	_screen_resized()
-	
+			
 	Fuel_bar.connect("fuel_depleted", Ship, "fuel_has_depleted")
 	HUD.connect("lives_depleted", self, "game_over")
 	
@@ -86,6 +86,7 @@ func _ready()->void:
 	Colour_manager.connect("colours_did_change", Fuel_container, "change_colours")
 	Colour_manager.connect("colours_did_change", Mystery_container, "change_colours")
 	Colour_manager.connect("colours_did_change", Explosion_container, "change_colours")
+	Colour_manager.connect("colours_did_change", Base_container, "change_colours")
 		
 	Fuel_container.connect("fuel_was_hit", Score_board, "add_score")
 	Fuel_container.connect("fuel_was_hit", Fuel_bar, "restore")
@@ -95,8 +96,10 @@ func _ready()->void:
 	
 	Tilemap.connect("landscape_draw_completed", self, "begin")
 	
-	# add access to the cameras position in ufo container  
+	# add access to the camera position as a spawn location helper
 	Ufo_container.camera_property = funcref(camera, "get_camera_position")
+	# add access to the camera position as a spawn location helper
+	Fireball_container.camera_property = funcref(camera, "get_camera_position")
 	
 	# add access to the highscore functions from within score board
 	Score_board.highscore_property = funcref(Highscore_board, "get_highscore")
@@ -115,7 +118,51 @@ func ship_was_hit()->void:
 	
 func _process(_delta)->void:
 	if is_scrolling == true:
-		camera.position.x += 1
+		camera.position.x += 150
+
+
+func mission_completed():
+	
+	is_scrolling = false
+	Ship.disable()
+	missions_completed += 1
+	Tilemap.clear_landscape()
+	HUD.switch_on_mission_complete()
+	#print('cleared')
+	camera.set_position(Vector2.ZERO)
+	
+	yield(get_tree().create_timer(1), "timeout")
+	emit_signal('new_mission_started')
+	HUD.switch_off_mission_complete() # will also add a flag
+	
+	
+	Land_manager.restart(1)
+	Stage_board.set_stage1()
+	Ship.reset()
+	
+	#stage_restart()
+	"""
+	VisualServer.set_default_clear_color("000000") 
+	Colour_manager.disable()
+	Ship.visible = false
+	is_scrolling = false
+	Tilemap.clear_landscape()
+	
+	for container in Containers.get_children():
+		for child in container.get_children():
+			child.queue_free()
+	yield(get_tree().create_timer(1), "timeout")
+	
+	
+	HUD.switch_off_
+	is_scrolling = true
+	Fuel_bar.reset()
+	Stage_board.set_stage1()
+	Fuel_bar.start()
+	Ship.reset()
+	
+	Land_manager.restart(1)
+	"""
 	
 	
 func game_over()->void:
@@ -175,4 +222,5 @@ func stage5_end()->void:
 
 
 func stage6_end()->void:
-	print('hurruh you win');
+	print('complete')
+	mission_completed()
