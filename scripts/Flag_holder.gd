@@ -7,15 +7,17 @@ onready var missions_completed = 0
 
 func _ready():
 	flag_earned()
-
+	
+	
 func reset():
 	xpos = 221
 	ypos = 252
 	
+	
 # comes as signal after completing mission	
 func flag_earned():
 	missions_completed+=1
-	# limit how far across the flags can display
+	# limit the number of flags shown
 	if missions_completed <= 16:
 		var flag = Flag_scene.instance()
 		flag.position = Vector2(xpos,ypos)
@@ -27,4 +29,3 @@ func flag_earned():
 		xpos = 221
 		missions_completed = 0
 		flag_earned()
-				

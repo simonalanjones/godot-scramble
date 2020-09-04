@@ -7,25 +7,25 @@ var high_scores:Array = [ 100, 100, 100, 100, 100, 100,
 	100, 100, 101, 102 ]
 
 
-func _ready():
+func _ready() -> void:
 	yield(get_tree(), "idle_frame")
 	visible = false
 	high_scores = load_scores()
 	setup_board()
 	
 	
-func setup_board():
+func setup_board() -> void:
 	high_scores.sort_custom(self, "sort_descending")
-	for n in range(0,10):
+	for n in range(0, 10):
 		get_node("score_"+str(n)).set_text(str(high_scores[n]))
 	emit_signal('highscores_loaded')
 		
 			
-func get_highscore()->int:
+func get_highscore() -> int:
 	return high_scores.max()
 	
 			
-func submit_score(new_score):
+func submit_score(new_score: int) -> void:
 	# sort to lowest first
 	high_scores.sort_custom(self, "sort_ascending")
 
@@ -42,7 +42,7 @@ func submit_score(new_score):
 	setup_board()
 	
 	
-func load_scores()->Array:
+func load_scores() -> Array:
 	var file = File.new()
 	if not file.file_exists("user://saved_scores.sav"):
 		print("No file saved!")
@@ -56,7 +56,7 @@ func load_scores()->Array:
 
 	var json = file.get_as_text()
 	var json_result = JSON.parse(json).result
-	var temp_high_scores = []
+	var temp_high_scores:Array = []
 
 	for entry in json_result:
 		temp_high_scores.append(entry)
@@ -64,7 +64,7 @@ func load_scores()->Array:
 	return temp_high_scores
 		
 		
-func save_scores()->bool:
+func save_scores() -> bool:
 	var file = File.new()
 	if file.open("user://saved_scores.sav", File.WRITE) != 0:
 		print("Error opening file")
@@ -74,17 +74,17 @@ func save_scores()->bool:
 	return true
 	
 
-func display_on():
+func display_on() -> void:
 	visible = true
 	
 
-func display_off():
+func display_off() -> void:
 	visible = false
 
 
-func sort_ascending(a, b):
+func sort_ascending(a, b) -> bool:
 	return true if a < b else false
 		
 		
-func sort_descending(a, b):
+func sort_descending(a, b) -> bool:
 	return true if a > b else false

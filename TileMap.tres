@@ -5,8 +5,6 @@
 [ext_resource path="res://sprites/tilemap/brick-square.png" type="Texture" id=3]
 [ext_resource path="res://sprites/tilemap/konami-letters.png" type="Texture" id=4]
 
-
-
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( -0.0180588, 0.318405, 3.45879, 0.542717, 7.72074, 4.69251, 7.94505, 7.72074, -0.0180588, 7.72074 )
 

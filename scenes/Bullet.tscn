@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://scripts/Bullet_k2d.gd" type="Script" id=1]
+[ext_resource path="res://scripts/Bullet.gd" type="Script" id=1]
 [ext_resource path="res://sprites/bullet.png" type="Texture" id=2]
+[ext_resource path="res://sounds/bullet.wav" type="AudioStream" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 0.491513, 0.512283 )
@@ -22,4 +23,8 @@ shape = SubResource( 1 )
 [node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 position = Vector2( 0.519575, 0.566808 )
 scale = Vector2( 0.0694876, 0.0647643 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+autoplay = true
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

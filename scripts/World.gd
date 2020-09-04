@@ -1,16 +1,23 @@
 extends Node
-signal mission_completed
 
+signal second_timeout
 # don't forget to use stretch mode 'viewport' and aspect 'ignore'
-onready var viewport = get_viewport()
+onready var viewport: Viewport = get_viewport()
 onready var is_scrolling:bool = false
 onready var is_game_over:bool = false
 onready var missions_completed = 0 # needed to instruct speed of fuel bar
+onready var process_counter:int = 0
+onready var scroll_time:float = 0
+onready var xpos:int = 0
+
+
+onready var Ship_scene:PackedScene = preload("res://scenes/Ship.tscn")
+onready var Ship
 
 # need signal to wire this flag up (shoot base)
 #onready var is_mission_complete:bool = false
 
-func _screen_resized():
+func _screen_resized() -> void:
 	var window_size = OS.get_window_size()
 	# see how big the window is compared to the viewport size
 	# floor it so we only get round numbers (0, 1, 2, 3 ...)
@@ -37,6 +44,8 @@ onready var Fireball_container = get_node("/root/World/Containers/Fireball_conta
 onready var Explosion_container = get_node("/root/World/Containers/Explosion_container")
 onready var Base_container = get_node("/root/World/Containers/Base_container")
 
+onready var Bullet_container = get_node("/root/World/Bullet_container")
+
 onready var Tilemap = get_node("/root/World/Tilemap")
 
 onready var Land_manager = get_node("/root/World/Landscape_manager")
@@ -45,14 +54,24 @@ onready var Stage_board = get_node("/root/World/HUD/Stage_board")
 onready var Score_board = get_node("/root/World/HUD/Score_board")
 onready var Fuel_bar = get_node("/root/World/HUD/Lower_hud/Fuel_bar")
 onready var HUD = get_node("/root/World/HUD")
-onready var Ship = get_node("/root/World/Ship")
+#onready var Ship = get_node("/root/World/Ship")
 onready var camera = get_node("/root/World/Tilemap/Camera2D")
 onready var Highscore_board = get_node("/root/World/HUD/Highscore_board")
+onready var Start_screen = get_node("/root/World/HUD/Start_screen")
+
+onready var Input_manager = get_node("/root/World/Input_manager")
 
 
-func _ready()->void:	
+func _ready() -> void:
+	
 	VisualServer.set_default_clear_color("000000") #background set to black
+	Start_screen.visible = true
+	Ship = Ship_scene.instance()
+	add_child(Ship)
+	Ship.visible = false
+	Fuel_bar.visible = false
 	Fuel_bar.missions_completed = missions_completed
+	
 	#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	var _a = get_tree().connect("screen_resized", self, "_screen_resized")
 	_screen_resized()
@@ -70,17 +89,14 @@ func _ready()->void:
 	Ship.connect("ship_was_hit", Colour_manager, "flash_colours")
 	
 	Ship.connect("crash_animation_complete", HUD, "lose_life")
-	Ship.connect("crash_animation_complete", self, "stage_restart",[],1) # deferred
+	Ship.connect("crash_animation_complete", self, "stage_restart",[],1) # 1 = deferred
 	
 	Ship.connect("crash_animation_complete", Colour_manager, "clear_flash_colours")
-	Ship.connect("second_timeout", Score_board, "add_score",[10])
+	self.connect("second_timeout", Score_board, "add_score",[10])
 
-	Land_manager.connect('landscape_decoded', Tilemap, 'setup')
-	Land_manager.connect('landscape_decoded', Rocket_container, 'setup')
-	Land_manager.connect('landscape_decoded', Fuel_container, 'setup')
-	Land_manager.connect('landscape_decoded', Mystery_container, 'setup')
-	Land_manager.connect('landscape_decoded', Base_container, 'setup')
-		
+	Land_manager.connect('end_of_stage_reached', self, 'end_of_stage_reached')
+	
+	## delegate this to containers script ##		
 	Colour_manager.connect("colours_did_change", Tilemap, "change_colours")
 	Colour_manager.connect("colours_did_change", Rocket_container, "change_colours")
 	Colour_manager.connect("colours_did_change", Fuel_container, "change_colours")
@@ -93,11 +109,27 @@ func _ready()->void:
 	Rocket_container.connect("rocket_was_hit", Score_board, "add_score") 
 	Mystery_container.connect("mystery_was_hit",Score_board, "add_score")
 	Base_container.connect("base_was_hit",Score_board, "add_score")
-	
-	Tilemap.connect("landscape_draw_completed", self, "begin")
-	
+	Base_container.connect("mission_completed", self, "mission_completed")
+		
 	# add access to the camera position as a spawn location helper
 	Ufo_container.camera_property = funcref(camera, "get_camera_position")
+	
+	# give input manager access to ship functions
+	Input_manager.player_left = funcref(Ship, "move_left")
+	Input_manager.player_right = funcref(Ship, "move_right")
+	Input_manager.player_up = funcref(Ship, "move_up")
+	Input_manager.player_down = funcref(Ship, "move_down")	
+	Input_manager.player_enabled = funcref(Ship, "is_enabled")
+	
+	Input_manager.fire_bullet = funcref(Bullet_container, "fire_bullet")
+	
+	#Input_manager.bullet_spawn_position = funcref(Ship, "get_bullet_spawn_position")
+	#Input_manager.rocket_spawn_position = funcref(Ship, "get_rocket_spawn_position")
+	
+	Bullet_container.bullet_spawn_global_position = funcref(Ship, "bullet_spawn_position")
+	
+
+	
 	# add access to the camera position as a spawn location helper
 	Fireball_container.camera_property = funcref(camera, "get_camera_position")
 	
@@ -105,67 +137,87 @@ func _ready()->void:
 	Score_board.highscore_property = funcref(Highscore_board, "get_highscore")
 	Score_board.submit_highscore_property = funcref(Highscore_board, "submit_score")
 
-	Land_manager.setup(1)
+	Tilemap.draw_runway(Land_manager.get_runway_data())
+	xpos += 28
+	Tilemap.visible = false
+	yield(get_tree().create_timer(3.5), "timeout")
+	Start_screen.visible = false
+	
+	Ship.visible = true
+	Tilemap.visible = true
+	HUD.show_lives()
+	yield(get_tree().create_timer(1), "timeout")
+	Ship.enabled = true
+	is_scrolling = true
+	Fuel_bar.visible = true
+	
+	
 	
 
-func begin()->void:
+func _process(delta) -> void:
+	if is_scrolling == true:
+		
+		scroll_time += delta
+		if scroll_time > 1:
+			scroll_time = 0
+			emit_signal('second_timeout')
+			
+			
+		camera.position.x += 1
+		process_counter += 1
+
+		# every 16th count we update the tilemap with two new columns
+		if process_counter == 16:
+			process_counter = 0
+			xpos+=2
+		
+			var landscape_data = Land_manager.get_landscape_data()
+			Tilemap.update_landscape(landscape_data, xpos)
+			Containers.update_ground_targets(landscape_data.ground_target, xpos)
+				
+	
+func begin() -> void:
 	is_scrolling = true
+	#camera.position.x = 10000
 
 
-func ship_was_hit()->void:
+func ship_was_hit() -> void:
 	is_scrolling = false
 	
-	
-func _process(_delta)->void:
-	if is_scrolling == true:
-		camera.position.x += 150
 
-
-func mission_completed():
+func mission_completed() -> void:
+	yield(get_tree().create_timer(3.5), "timeout")
 	
+	VisualServer.set_default_clear_color("000000") 
+	Colour_manager.disable()
 	is_scrolling = false
 	Ship.disable()
+	Ship.visible = false
 	missions_completed += 1
 	Tilemap.clear_landscape()
 	HUD.switch_on_mission_complete()
-	#print('cleared')
-	camera.set_position(Vector2.ZERO)
-	
-	yield(get_tree().create_timer(1), "timeout")
-	emit_signal('new_mission_started')
+	yield(get_tree().create_timer(3.5), "timeout")
 	HUD.switch_off_mission_complete() # will also add a flag
-	
-	
-	Land_manager.restart(1)
-	Stage_board.set_stage1()
+	camera.set_position(Vector2.ZERO)
 	Ship.reset()
+	Colour_manager.enable()
+	Fuel_bar.reset()
+	Stage_board.set_stage1()
 	
-	#stage_restart()
-	"""
-	VisualServer.set_default_clear_color("000000") 
-	Colour_manager.disable()
-	Ship.visible = false
-	is_scrolling = false
-	Tilemap.clear_landscape()
-	
+	# move this into container script
 	for container in Containers.get_children():
 		for child in container.get_children():
 			child.queue_free()
-	yield(get_tree().create_timer(1), "timeout")
 	
-	
-	HUD.switch_off_
+	Land_manager.restart(1)		
+
+	Tilemap.draw_runway(Land_manager.get_runway_data())
+	xpos = 28
+	process_counter = 0 
 	is_scrolling = true
-	Fuel_bar.reset()
-	Stage_board.set_stage1()
-	Fuel_bar.start()
-	Ship.reset()
-	
-	Land_manager.restart(1)
-	"""
 	
 	
-func game_over()->void:
+func game_over() -> void:
 	VisualServer.set_default_clear_color("000000")
 	is_game_over = true
 	
@@ -181,46 +233,53 @@ func game_over()->void:
 	HUD.switch_to_high_scores()
 
 
-func stage_restart()->void:
+func stage_restart() -> void:
 	if is_game_over == false:
 		is_scrolling = true
+		scroll_time = 0
 		camera.set_position(Vector2.ZERO)
 		Land_manager.restart(Stage_board.get_active_stage())
+		Tilemap.draw_runway(Land_manager.get_runway_data())
+		xpos = 28
 	
 		Fuel_bar.reset()
 		Fuel_bar.start()
 		Ship.reset()
+
+
+func end_of_stage_reached(stage: int) -> void:
+	match stage:
+		1: stage1_end()
+		2: stage2_end()
+		3: stage3_end()
+		4: stage4_end()
+		5: stage5_end()
 		
-	
-func stage1_end()->void:	
+		
+func stage1_end() -> void:
 	Rocket_container.disable_rockets()
 	Stage_board.set_stage2()
 	Ufo_container.enable()
 	
 	
-func stage2_end()->void:	
+func stage2_end() -> void:	
 	Rocket_container.disable_rockets()
 	Ufo_container.disable()
 	Fireball_container.enable()
 	Stage_board.set_stage3()
 	
 	
-func stage3_end()->void:	
+func stage3_end() -> void:	
 	Ufo_container.disable()
 	Fireball_container.disable()
 	Rocket_container.enable_rockets()
 	Stage_board.set_stage4()
 	
 	
-func stage4_end()->void:	
+func stage4_end() -> void:	
 	Rocket_container.enable_rockets()
 	Stage_board.set_stage5()
 	
 	
-func stage5_end()->void:	
+func stage5_end() -> void:	
 	Stage_board.set_stage6()
-
-
-func stage6_end()->void:
-	print('complete')
-	mission_completed()

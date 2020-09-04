@@ -1,186 +1,162 @@
+## This script is responsible for returning tilemap data by translating the
+## original Scramble landscape data which is held in landscape_data.gd.
+## The x position of the screen is handled in Tilemap.gd, this script reads
+## two columns each time it is called and this is managed via its own pointer
+## This is called from the process function in World.gd if scrolling is enabled
+
 extends Node
 
-#warning-ignore:unused_signal
-signal landscape_decoded
+signal end_of_stage_reached
 
-var rocket_positions:Array = []
-var fuel_positions:Array = []
-var mystery_positions:Array = []
-var base_positions:Array = []
-var landscape_data:Array = []
-
-var xpos:int = 0
+onready var landscape_pointer: int = 0
+onready var stage: int = 1
+onready var stage_data: Array
 
 
-func restart(stage)->void:
-	# clear previous end stage markers		
-	for node in get_tree().get_nodes_in_group("stage_clear_markers"):
-		node.queue_free()
-	
-	# clear previous ground targets	
-	rocket_positions.clear()
-	fuel_positions.clear()
-	mystery_positions.clear()
-	base_positions.clear()
-	
-	#clear previous tilemap landscape data
-	landscape_data.clear()
+# This dictionary maps a character code from original scramble data
+# into an ID our tilemap can use
+onready var tile_translations: Dictionary = {
+	1:2, 2:3, 4:4, 16:14, 44:1, 45:4, 46:0, 47:2, 48:5, 49:7, 50:3, 51:6,
+	52:9, 53:11, 54:8, 58:12, 92:25, 93:27, 94:24, 96:29, 97:31, 98:28,
+	99:30, 209:33, 
+	31:36, 27:35, 17:38, 30:37, 25:40, 29:39
+}
 
-	# reset the draw x position
-	xpos = 0
-	
-	# pass back to setup routine
-	setup(stage)
-	
-	
-func setup(s = 1)->void:
-	for stage in range(s, 7):
-		# the first stage in the draw loop gets a runway
-		var draw_runway = true if stage == s else false
-		decode_landscape_stage(stage,draw_runway)
-	# delay the execution to wait for connections in World node	
-	call_deferred("emit_signal","landscape_decoded")
+
+func _ready():
+	stage_data = get_data_for_stage(stage)
+
 		
-		
-func decode_landscape_stage(stage:int, draw_runway:bool = false)->void:
+func get_runway_data() -> Array:
+	var new_landscape_data: Array = []
 	
-	var landscape:Array = get_data_for_stage(stage)
+	# 30 columns of runway
+	for _n in range(1,31):
+		new_landscape_data.append(
+			{ 
+				"ypos": 25,
+				"outer_tile_id": 8,
+				"inner_tile_id": 14,
+				"position": "bottom"
+			}
+		)	
+	return new_landscape_data
 	
-	var pointer:int = 0
-	var ground_target_code:int
-	var first_fill_code:int
-	var second_fill_code:int
-
-	if draw_runway == true:
-		# we're going to draw 30 columns 
-		for n in range(30):
-			xpos += 1
 			
-			var _d = { 
-				'xpos' : n, 
-				'ypos' : 25,
-				'outer_tile_id' : 8,
-				'inner_tile_id' : 14,
-				'position' : 'bottom'
-				}
+func get_landscape_data() -> Dictionary:
+	var landscape_top_data: Array = []
+	var landscape_bottom_data: Array = []
+			
+	if landscape_has_ceiling() == true:
+		for data in decode_landscape_top():
+			landscape_top_data.append(data)
 				
-			landscape_data.append(_d)
+	for data in decode_landscape_bottom():
+		landscape_bottom_data.append(data)
 	
-	# fill code is the tile id that sit below/up outline		
-	first_fill_code = 17 if stage > 3 else 14
-	second_fill_code = 34 if stage > 3 else 14
 	
-	# 0xFF is the end of landscape marker
-	while not landscape[pointer].hex_to_int() == 255:
+	var data_to_return: Dictionary = {
+		"landscape_top": landscape_top_data,
+		"landscape_bottom": landscape_bottom_data,
+		"ground_target": decode_ground_target(),
+	}
+	
+	update_pointer_position()
+	return data_to_return
+	
+	
+func decode_ground_target() -> Dictionary:
+	var offset = 8 if landscape_has_ceiling() else 5
+	return {
+		"target_id": stage_data[landscape_pointer + offset].hex_to_int(),
+		"ypos": (stage_data[landscape_pointer].hex_to_int() & 248) / 8
+	}
 		
-		# y position bottom
-		var first_y = (landscape[pointer+0].hex_to_int() & 248) / 8
-		# y position bottom
-		var second_y = (landscape[pointer+2].hex_to_int() & 248) / 8	
 		
-		# character code bottom
-		var first_sprite_code =  get_tile(landscape[pointer+1].hex_to_int()) 
-		# character code bottom
-		var second_sprite_code = get_tile(landscape[pointer+3].hex_to_int()) 
-		
-		# used to signify ceiling if not 0
-		var ceiling_flag = landscape[pointer+4].hex_to_int() 
-		
-		# if ceiling flag is not 0 then different offsets apply
-		if not ceiling_flag == 0:
-			ground_target_code = landscape[pointer+8].hex_to_int()
-			
-			var third_y = (landscape[pointer+4].hex_to_int() & 248) / 8
-			var fourth_y = (landscape[pointer+6].hex_to_int() & 248) / 8
+func decode_landscape_bottom() -> Array:
+	return [
+		{
+			"ypos": (stage_data[landscape_pointer].hex_to_int() & 248) / 8,
+			"outer_tile_id": get_tile(stage_data[landscape_pointer + 1].hex_to_int()),
+			"inner_tile_id": 17 if stage > 3 else 14,
+			"position": "bottom",
+		}, 
+		{
+			"ypos": (stage_data[landscape_pointer + 2].hex_to_int() & 248) / 8,
+			"outer_tile_id": get_tile(stage_data[landscape_pointer + 3].hex_to_int()),
+			"inner_tile_id": 34 if stage > 3 else 14,
+			"position": "bottom",
+		}
+	]
+	
+	
+func decode_landscape_top() -> Array:
+	return [
+		{
+			"ypos": (stage_data[landscape_pointer + 4].hex_to_int() & 248) / 8,
+			"outer_tile_id": get_tile(stage_data[landscape_pointer + 5].hex_to_int()),
+			"inner_tile_id": 17 if stage > 3 else 14,
+			"position": "top",
+		},
+		{
+			"ypos": (stage_data[landscape_pointer + 6].hex_to_int() & 248) / 8,
+			"outer_tile_id": get_tile(stage_data[landscape_pointer + 7].hex_to_int()),
+			"inner_tile_id": 34 if stage > 3 else 14,
+			"position": "top",	
+		}
+	]
 
-			# character code top
-			var third_sprite_code = get_tile(landscape[pointer+5].hex_to_int())
-			# character code top		
-			var fourth_sprite_code =  get_tile(landscape[pointer+7].hex_to_int())
-			
-			var _d1 = { 
-				'xpos' : xpos, 
-				'ypos' : third_y,
-				'outer_tile_id' : third_sprite_code,
-				'inner_tile_id' : first_fill_code,
-				'position' : 'top'
-				}
-				
-			landscape_data.append(_d1)
-			
-			var _d2 = { 
-				'xpos' : xpos+1, 
-				'ypos' : fourth_y,
-				'outer_tile_id' : fourth_sprite_code,
-				'inner_tile_id' : second_fill_code,
-				'position' : 'top'
-				}
-			
-			landscape_data.append(_d2)
-			
-			pointer += 9
-		else:
-			ground_target_code = landscape[pointer+5].hex_to_int()
-			pointer += 6
-		
-		if not ground_target_code == 0:
-			add_ground_target(ground_target_code, xpos, first_y - 2)
-			
-		
-		var _d1 = { 
-				'xpos' : xpos, 
-				'ypos' : first_y,
-				'outer_tile_id' : first_sprite_code,
-				'inner_tile_id' : first_fill_code,
-				'position' : 'bottom'
-				}
-				
-		landscape_data.append(_d1)
-		
-		var _d2 = { 
-				'xpos' : xpos+1, 
-				'ypos' : second_y,
-				'outer_tile_id' : second_sprite_code,
-				'inner_tile_id' : second_fill_code,
-				'position' : 'bottom'
-				}
-		landscape_data.append(_d2)
-				
-		# we read two tile positions at a time so advance screen x +2
-		xpos += 2
-	
-	
-	var end_position = (Vector2(xpos*8,1))
-	
-	# add a stage clear marker at end of stage landscape
-	var node = VisibilityNotifier2D.new()
-	var funcname = "stage"+str(stage)+"_end"
-	node.set_global_position(Vector2(end_position.x,end_position.y))
-	node.connect('screen_entered',get_node("/root/World/"),funcname)
-	node.add_to_group('stage_clear_markers')
-	get_node("/root/World/").call_deferred("add_child", node)
-	
 
-func add_ground_target(target_id,x_pos,y_pos)->void:
-	match target_id:
-		1: rocket_positions.append(Vector2(x_pos,y_pos))
-		2: fuel_positions.append(Vector2(x_pos,y_pos))
-		4: mystery_positions.append(Vector2(x_pos,y_pos))
-		8: base_positions.append(Vector2(x_pos,y_pos))
-		
-		
+func end_of_stage_check() -> bool:
+	return stage_data[landscape_pointer].hex_to_int() == 255
+	
+	
+func landscape_has_ceiling() -> bool:
+	return stage_data[landscape_pointer + 4].hex_to_int() != 0
+	
+	
+func update_pointer_position() -> void:
+	# if ceiling flag is not 0 then different offsets apply
+	if landscape_has_ceiling() == true:
+		landscape_pointer += 9
+	else:
+		landscape_pointer += 6
+	# check if we have reached the end of the stage
+	if end_of_stage_check() == true:
+		advance_landscape_stage()
+
+
+func advance_landscape_stage() -> void:
+	emit_signal("end_of_stage_reached", stage)
+	stage += 1
+	# landscape repeats stage 6 until base target is destroyed
+	if stage > 6:
+		stage = 6
+	stage_data = get_data_for_stage(stage)
+	landscape_pointer = 0
+	
+	
 # return a tilemap id from scramble character code
-func get_tile(id)->int:
+func get_tile(id) -> int:
 	if id in tile_translations:
 		return tile_translations[id]
 	else:
-		print(id)
-		return 14
+		return 14 # this should never happen
 		
+func stage_restart() -> void:
+	landscape_pointer = 0
+	
 		
+func restart(_stage:int = 1) -> void:
+	print('restarting ' + str(_stage))
+	stage = _stage 
+	stage_data = get_data_for_stage(stage)
+	landscape_pointer = 0
+	
+	
 # return a stage of landscape data from landscape_data.gd (global variable)
-func get_data_for_stage(stage)->Array:
-	match stage:
+func get_data_for_stage(stage_number) -> Array:
+	match stage_number:
 		1: return LandscapeData.stage_1_landscape_layout
 		2: return LandscapeData.stage_2_landscape_layout
 		3: return LandscapeData.stage_3_landscape_layout
@@ -188,32 +164,3 @@ func get_data_for_stage(stage)->Array:
 		5: return LandscapeData.stage_5_landscape_layout
 		_: return LandscapeData.stage_6_landscape_layout
 		
-		
-# this dictionary maps character codes from original scramble data
-# into landscape tilemap ids
-var tile_translations = {
-	1:2, 2:3, 4:4, 16:14, 44:1, 45:4, 46:0, 47:2, 48:5, 49:7, 50:3, 51:6,
-	52:9, 53:11, 54:8, 58:12, 92:25, 93:27, 94:24, 96:29, 97:31, 98:28,
-	99:30,209:33, 
-	31:36, 27:35, 17:38, 30:37, 25:40, 29:39
-}
-
-
-func get_rocket_positions()->Array:
-	return rocket_positions
-
-
-func get_mystery_positions()->Array:
-	return mystery_positions
-	
-	
-func get_fuel_positions()->Array:
-	return fuel_positions
-	
-	
-func get_base_positions()->Array:
-	return mystery_positions
-	
-	
-func get_landscape()->Array:
-	return landscape_data

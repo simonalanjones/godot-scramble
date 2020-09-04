@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://scenes/Highscore_board.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/Attract_mode.gd" type="Script" id=2]
@@ -13,8 +13,13 @@
 [ext_resource path="res://shaders/Fuel_dump.shader" type="Shader" id=11]
 [ext_resource path="res://shaders/Mystery.shader" type="Shader" id=12]
 [ext_resource path="res://sprites/rocket/rocket_frame5_shader.png" type="Texture" id=13]
+[ext_resource path="res://scripts/Score_table.gd" type="Script" id=14]
 
 [sub_resource type="DynamicFont" id=1]
+size = 8
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=4]
 size = 8
 font_data = ExtResource( 4 )
 
@@ -23,35 +28,183 @@ size = 8
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 4 )
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="Animation" id=3]
+resource_name = "points"
+length = 8.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("Animated_text/dots_50:visible_characters")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 3 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Animated_text/points_50:visible_characters")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.7, 1.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 6 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Animated_text/dots_80:visible_characters")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 1.4, 1.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 3 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Animated_text/points_80:visible_characters")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 2.1, 2.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 6 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Animated_text/dots_100:visible_characters")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 2.8, 3.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 3 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Animated_text/points_100:visible_characters")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 3.5, 4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 6 ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Animated_text/dots_150:visible_characters")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 4.3, 4.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 3 ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("Animated_text/points_150:visible_characters")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 5, 5.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 6 ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("Animated_text/dots_800:visible_characters")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 5.8, 6.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 3 ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("Animated_text/points_800:visible_characters")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 6.5, 7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 6 ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("Animated_text/dots_mystery:visible_characters")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 7.2, 7.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 3 ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("Animated_text/points_mystery:visible_characters")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 7.9, 8.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 7 ]
+}
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id=5]
+
+[sub_resource type="ShaderMaterial" id=6]
 shader = ExtResource( 10 )
 shader_param/outline = Color( 1, 0, 0, 1 )
 shader_param/fill = Color( 0, 1, 0, 1 )
 shader_param/thrust = Color( 0, 0, 1, 1 )
 
-[sub_resource type="ShaderMaterial" id=6]
+[sub_resource type="ShaderMaterial" id=7]
 shader = ExtResource( 11 )
 shader_param/tank = Color( 44.2411, 0, 58.38, 1 )
 shader_param/ul_chars = Color( 0, 0, 0.901961, 1 )
 shader_param/stand = Color( 0.87, 0, 0, 1 )
 
-[sub_resource type="ShaderMaterial" id=7]
+[sub_resource type="ShaderMaterial" id=8]
 shader = ExtResource( 12 )
 shader_param/left = Color( 1, 0, 0, 1 )
 shader_param/right = Color( 0, 1, 0, 1 )
 shader_param/middle = Color( 0, 0, 1, 1 )
 
-[sub_resource type="ShaderMaterial" id=8]
-
 [sub_resource type="ShaderMaterial" id=9]
+
+[sub_resource type="ShaderMaterial" id=10]
 shader = ExtResource( 10 )
 shader_param/outline = Color( 1, 0, 0, 1 )
 shader_param/fill = Color( 0, 1, 0, 1 )
 shader_param/thrust = Color( 0, 0, 1, 1 )
 
-[sub_resource type="ShaderMaterial" id=10]
+[sub_resource type="ShaderMaterial" id=11]
 shader = ExtResource( 12 )
 shader_param/left = Color( 1, 0, 0, 1 )
 shader_param/right = Color( 0, 1, 0, 1 )
@@ -61,6 +214,7 @@ shader_param/middle = Color( 0, 0, 1, 1 )
 script = ExtResource( 2 )
 
 [node name="Highscore_board" parent="." instance=ExtResource( 1 )]
+visible = false
 
 [node name="Intro" type="Node2D" parent="."]
 visible = false
@@ -114,10 +268,10 @@ __meta__ = {
 }
 
 [node name="Konami_1981_label" type="Label" parent="Intro"]
-margin_left = 64.1364
-margin_top = 222.494
-margin_right = 160.136
-margin_bottom = 230.494
+margin_left = 50.0097
+margin_top = 230.711
+margin_right = 146.01
+margin_bottom = 238.711
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "KONAMI 1981 "
@@ -126,13 +280,27 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Score_table" type="Node2D" parent="."]
+[node name="esc_key" type="Label" parent="Intro"]
+margin_left = 36.436
+margin_top = 243.783
+margin_right = 156.436
+margin_bottom = 251.783
+custom_fonts/font = SubResource( 4 )
+text = "[ESC] KEY: HELP"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Label" type="Label" parent="Score_table"]
-margin_left = 40.0
-margin_top = 49.0
-margin_right = 160.0
-margin_bottom = 57.0
+[node name="Score_table" type="Node2D" parent="."]
+visible = false
+script = ExtResource( 14 )
+
+[node name="score_table_text" type="Label" parent="Score_table"]
+margin_left = 53.0
+margin_top = 46.0
+margin_right = 173.0
+margin_bottom = 54.0
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0.878431, 0.878431, 0, 1 )
 text = "- SCORE TABLE -"
@@ -141,20 +309,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="Score_table"]
-margin_left = 113.0
-margin_top = 74.0
-margin_right = 161.0
-margin_bottom = 82.0
-custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "50 PTS"
-align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Score_table"]
+anims/points = SubResource( 3 )
 
-[node name="Label5" type="Label" parent="Score_table"]
+[node name="Animated_text" type="Node2D" parent="Score_table"]
+
+[node name="dots_50" type="Label" parent="Score_table/Animated_text"]
 margin_left = 75.0
 margin_top = 73.0
 margin_right = 99.0
@@ -167,7 +327,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label6" type="Label" parent="Score_table"]
+[node name="dots_80" type="Label" parent="Score_table/Animated_text"]
 margin_left = 75.4259
 margin_top = 98.2012
 margin_right = 99.4259
@@ -180,7 +340,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label7" type="Label" parent="Score_table"]
+[node name="dots_100" type="Label" parent="Score_table/Animated_text"]
 margin_left = 75.4259
 margin_top = 121.201
 margin_right = 99.4259
@@ -193,7 +353,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label8" type="Label" parent="Score_table"]
+[node name="dots_150" type="Label" parent="Score_table/Animated_text"]
 margin_left = 75.4259
 margin_top = 147.201
 margin_right = 99.4259
@@ -206,7 +366,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label9" type="Label" parent="Score_table"]
+[node name="dots_800" type="Label" parent="Score_table/Animated_text"]
 margin_left = 75.4259
 margin_top = 173.201
 margin_right = 99.4259
@@ -219,7 +379,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label10" type="Label" parent="Score_table"]
+[node name="dots_mystery" type="Label" parent="Score_table/Animated_text"]
 margin_left = 75.4259
 margin_top = 201.201
 margin_right = 99.4259
@@ -232,7 +392,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label3" type="Label" parent="Score_table"]
+[node name="points_50" type="Label" parent="Score_table/Animated_text"]
+margin_left = 113.0
+margin_top = 73.637
+margin_right = 161.0
+margin_bottom = 81.637
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "50 PTS"
+align = 2
+percent_visible = 0.6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="points_80" type="Label" parent="Score_table/Animated_text"]
 margin_left = 113.0
 margin_top = 97.0
 margin_right = 161.0
@@ -245,7 +419,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label4" type="Label" parent="Score_table"]
+[node name="points_100" type="Label" parent="Score_table/Animated_text"]
 margin_left = 105.0
 margin_top = 122.0
 margin_right = 161.0
@@ -258,7 +432,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label11" type="Label" parent="Score_table"]
+[node name="points_150" type="Label" parent="Score_table/Animated_text"]
 margin_left = 105.0
 margin_top = 149.0
 margin_right = 161.0
@@ -271,7 +445,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label12" type="Label" parent="Score_table"]
+[node name="points_800" type="Label" parent="Score_table/Animated_text"]
 margin_left = 105.0
 margin_top = 175.0
 margin_right = 161.0
@@ -284,7 +458,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label13" type="Label" parent="Score_table"]
+[node name="points_mystery" type="Label" parent="Score_table/Animated_text"]
 margin_left = 105.0
 margin_top = 202.0
 margin_right = 161.0
@@ -297,38 +471,212 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="konami 1981" type="Label" parent="Score_table"]
+margin_left = 50.7958
+margin_top = 230.759
+margin_right = 146.796
+margin_bottom = 238.759
+custom_fonts/font = SubResource( 4 )
+text = "KONAMI 1981"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="esc_key" type="Label" parent="Score_table"]
+margin_left = 30.3844
+margin_top = 244.086
+margin_right = 163.384
+margin_bottom = 252.086
+custom_fonts/font = SubResource( 4 )
+text = "[ESC] KEY: HELP"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="score_items" type="Node2D" parent="Score_table"]
-material = SubResource( 3 )
+material = SubResource( 5 )
 
 [node name="rocket1" type="Sprite" parent="Score_table/score_items"]
-material = SubResource( 4 )
+material = SubResource( 6 )
 position = Vector2( 58, 78.387 )
 texture = ExtResource( 6 )
 
 [node name="fuel" type="Sprite" parent="Score_table/score_items"]
-material = SubResource( 6 )
+material = SubResource( 7 )
 position = Vector2( 58, 152.457 )
 texture = ExtResource( 5 )
 
 [node name="mystery" type="Sprite" parent="Score_table/score_items"]
-material = SubResource( 7 )
+material = SubResource( 8 )
 position = Vector2( 58, 205.591 )
 texture = ExtResource( 9 )
 
 [node name="ufo" type="Sprite" parent="Score_table/score_items"]
-material = SubResource( 8 )
+material = SubResource( 9 )
 position = Vector2( 58, 129 )
 texture = ExtResource( 7 )
 
 [node name="rocket_frame2" type="Sprite" parent="Score_table/score_items"]
-material = SubResource( 9 )
+material = SubResource( 10 )
 position = Vector2( 58, 104.527 )
 texture = ExtResource( 13 )
 
 [node name="base" type="Sprite" parent="Score_table/score_items"]
-material = SubResource( 10 )
+material = SubResource( 11 )
 position = Vector2( 58, 179.467 )
 texture = ExtResource( 8 )
 
 [node name="Score_board" parent="." instance=ExtResource( 3 )]
 position = Vector2( 16, 0 )
+
+[node name="Help" type="Node2D" parent="."]
+visible = false
+
+[node name="title" type="Label" parent="Help"]
+margin_left = 84.4388
+margin_top = 20.2067
+margin_right = 148.439
+margin_bottom = 28.2067
+custom_fonts/font = SubResource( 4 )
+text = "SCRAMBLE"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title2" type="Label" parent="Help"]
+margin_left = 70.0374
+margin_top = 47.123
+margin_right = 166.037
+margin_bottom = 55.123
+custom_fonts/font = SubResource( 4 )
+text = "- CONTROLS -"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title3" type="Label" parent="Help"]
+margin_left = 80.0948
+margin_top = 181.576
+margin_right = 160.095
+margin_bottom = 189.576
+custom_fonts/font = SubResource( 4 )
+text = "- CREDITS-"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_ship" type="Label" parent="Help"]
+margin_left = 40.8184
+margin_top = 79.1377
+margin_right = 120.818
+margin_bottom = 87.1377
+custom_fonts/font = SubResource( 4 )
+text = "MOVE SHIP:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_ship3" type="Label" parent="Help"]
+margin_left = 26.992
+margin_top = 103.632
+margin_right = 122.992
+margin_bottom = 111.632
+custom_fonts/font = SubResource( 4 )
+text = "FIRE BULLET:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_ship5" type="Label" parent="Help"]
+margin_left = 26.992
+margin_top = 121.632
+margin_right = 122.992
+margin_bottom = 129.632
+custom_fonts/font = SubResource( 4 )
+text = "FIRE ROCKET:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_ship7" type="Label" parent="Help"]
+margin_left = 35.3354
+margin_top = 139.899
+margin_right = 123.335
+margin_bottom = 147.899
+custom_fonts/font = SubResource( 4 )
+text = "START GAME:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_ship9" type="Label" parent="Help"]
+margin_left = 44.9429
+margin_top = 200.474
+margin_right = 196.943
+margin_bottom = 219.474
+custom_fonts/font = SubResource( 4 )
+text = "PROGRAMMING & SOUND
+SIMON A JONES"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_ship2" type="Label" parent="Help"]
+margin_left = 130.196
+margin_top = 80.6191
+margin_right = 218.196
+margin_bottom = 88.6191
+custom_fonts/font = SubResource( 4 )
+custom_colors/font_color = Color( 0.878431, 0.239216, 0, 1 )
+text = "CURSOR KEYS"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_ship4" type="Label" parent="Help"]
+margin_left = 145.854
+margin_top = 103.0
+margin_right = 185.854
+margin_bottom = 111.0
+custom_fonts/font = SubResource( 4 )
+custom_colors/font_color = Color( 0.878431, 0.239216, 0, 1 )
+text = ". KEY"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_ship6" type="Label" parent="Help"]
+margin_left = 142.983
+margin_top = 122.376
+margin_right = 198.983
+margin_bottom = 130.376
+custom_fonts/font = SubResource( 4 )
+custom_colors/font_color = Color( 0.878431, 0.239216, 0, 1 )
+text = "TAB KEY"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_ship8" type="Label" parent="Help"]
+margin_left = 146.461
+margin_top = 138.682
+margin_right = 202.461
+margin_bottom = 146.682
+custom_fonts/font = SubResource( 4 )
+custom_colors/font_color = Color( 0.878431, 0.239216, 0, 1 )
+text = "SPC KEY"
+__meta__ = {
+"_edit_use_anchors_": false
+}

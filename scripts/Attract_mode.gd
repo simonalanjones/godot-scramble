@@ -1,5 +1,7 @@
 extends Node2D
 
+signal fire_pressed
+
 const GREEN = Color(0.11,0.76,0)
 const PURPLE = Color(0.52,0,0.85)
 const RED = Color(0.87,0,0)
@@ -15,9 +17,12 @@ const BLACK = Color(0,0,0)
 const WHITE = Color(1,1,1)
 
 
-onready var viewport = get_viewport()
+onready var viewport:Viewport = get_viewport()
 onready var Score_board = get_node("/root/Attract_mode/Score_board")
+onready var Score_table = get_node("/root/Attract_mode/Score_table")
+onready var Animation_player = get_node("/root/Attract_mode/Score_table/AnimationPlayer")
 onready var Highscore_board = get_node("/root/Attract_mode/Highscore_board")
+onready var Intro = get_node("/root/Attract_mode/Intro")
 
 func _screen_resized():
 	var window_size = OS.get_window_size()
@@ -36,7 +41,12 @@ func _screen_resized():
 	# attach the viewport to the rect we calculated
 	viewport.set_attach_to_screen_rect(Rect2(diffhalf, viewport.size * scale))
 	
-func _ready():
+func _ready() -> void:
+	Intro.visible = false
+	Score_table.visible = false
+	Highscore_board.visible = false
+	
+		
 	var _a = get_tree().connect("screen_resized", self, "_screen_resized")
 	_screen_resized()
 	
@@ -65,9 +75,32 @@ func _ready():
 	$Score_table/score_items/base.get_material().set_shader_param("right", colours.green)
 	$Score_table/score_items/base.get_material().set_shader_param("middle", colours.pink)
 
-func _process(_delta):
-	pass
 
-func highscores_loaded():
-	#Highscore_board.display_on()
-	pass
+func highscores_loaded() -> void:
+	while true:		
+		Intro.visible = true
+		yield(get_tree().create_timer(2), "timeout")
+		Intro.visible = false
+		Highscore_board.visible = true
+		yield(get_tree().create_timer(4), "timeout")
+		Highscore_board.visible = false
+		Score_table.visible = true
+		yield(get_tree().create_timer(.5), "timeout")
+		Animation_player.play("points")
+		yield(get_tree().create_timer(12), "timeout")
+		Score_table.visible = false
+		Score_table.reset()
+	
+func _input(event) -> void:
+	if event.is_action_pressed("ui_accept"):
+		emit_signal("fire_pressed")
+		start_game()
+		#$"Background/AnimationPlayer".play("wipe")
+		#get_ready_text.visible = true
+		yield(get_tree().create_timer(.5),"timeout") #small delay for wipe transition
+		#Scene_switcher.change_scene("res://scenes/Main.tscn", {"demo_mode":false})
+		
+func start_game() -> void:
+	yield(get_tree().create_timer(1),"timeout")
+	if not get_tree().change_scene("res://scenes/TileMap.tscn") == 0:
+		print('error loading main scene')

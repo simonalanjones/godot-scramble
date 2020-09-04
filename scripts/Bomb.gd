@@ -62,8 +62,13 @@ func _ready():
 	
 	#set the initial sprite frame
 	$Falling_animation.set_frame(0)
+	
+	#var sound_player = AudioStreamPlayer.new()
+	#sound_player.stream = load("res://sounds/bomb_drop.wav")
+	#sound_player.play()
+	
 
-func _process(_delta):
+func _process(_delta) -> void:
 	
 	var collision
 		
@@ -91,10 +96,10 @@ func _process(_delta):
 	anim_counter+=1
 	
 		
-func get_class():
+func get_class() -> String:
 	return "Bomb"
 	
 	
-func explode():	
-		Explosion_container.spawn_explosion(self)
-		queue_free()
+func explode() -> void:	
+	Explosion_container.spawn_explosion(self)
+	queue_free()

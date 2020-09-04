@@ -7,8 +7,8 @@ onready var extra_life:bool = false
 onready var blink_1up:bool = true
 onready var high_score:int # highest score from highscore table
 
-onready var highscore_property
-onready var submit_highscore_property
+onready var highscore_property: Reference
+onready var submit_highscore_property: Reference
 
 # SHOULD THE SCOREBOARD INCLUDE THE CODE FROM HIGHSCORE BOARD?
 
@@ -27,7 +27,7 @@ func submit_highscore() -> void:
 		submit_highscore_property.call_func(score)
 	
 	
-func _ready():
+func _ready() -> void:
 	yield(get_tree(), "idle_frame")
 	add_score(0)
 	high_score = get_high_score()
@@ -35,11 +35,11 @@ func _ready():
 	$label_value_high_score.set_text(str(high_score_text))
 		
 	
-func setup(_high_score):
+func setup(_high_score: int) -> void:
 	high_score = _high_score
 	
 	
-func add_score(amount):
+func add_score(amount: int) -> void:
 	score += amount
 	if score >= 10000 and extra_life == false:
 		emit_signal('extra_life_awarded')
@@ -51,15 +51,15 @@ func add_score(amount):
 		$label_value_high_score.set_text(str(high_score_text))
 	
 	
-func enable_1up_blink():
+func enable_1up_blink() -> void:
 	blink_1up = true
 	
 	
-func disable_1up_blink():
+func disable_1up_blink() -> void:
 	$label_text_1up.visible = visible
 	blink_1up = false
 	
 		
-func _on_Timer_timeout():
+func _on_Timer_timeout() -> void:
 	if blink_1up == true:
 		$label_text_1up.visible = !$label_text_1up.visible

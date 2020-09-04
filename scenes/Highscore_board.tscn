@@ -382,3 +382,29 @@ text = "10TH"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="KONAMI_1981" type="Label" parent="."]
+margin_left = 64.0
+margin_top = 230.148
+margin_right = 160.0
+margin_bottom = 238.148
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0, 0.764706, 0.85098, 1 )
+text = "KONAMI 1981"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="esc for help" type="Label" parent="."]
+margin_left = 49.2935
+margin_top = 243.554
+margin_right = 169.293
+margin_bottom = 251.554
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0, 0.764706, 0.85098, 1 )
+text = "[ESC] KEY: HELP"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

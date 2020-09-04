@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://sprites/explosions/player_bomb_explosion/bomb_explodes3.png" type="Texture" id=1]
 [ext_resource path="res://sprites/bomb/bomb3.png" type="Texture" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://sprites/bomb/bomb2.png" type="Texture" id=8]
 [ext_resource path="res://sprites/explosions/player_bomb_explosion/bomb_explodes2.png" type="Texture" id=9]
 [ext_resource path="res://scripts/Bomb.gd" type="Script" id=10]
+[ext_resource path="res://sounds/bomb drop.wav" type="AudioStream" id=11]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1.89291, 3.07545 )
@@ -42,3 +43,7 @@ frames = SubResource( 2 )
 frame = 4
 speed_scale = 1.5
 playing = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+autoplay = true

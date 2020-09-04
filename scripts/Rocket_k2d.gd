@@ -2,17 +2,17 @@ extends KinematicBody2D
 
 signal rocket_hit
 
-var launched = false
+var launched:bool  = false
 
-func _ready():
+func _ready() -> void:
 	$Animation.visible = false
 	
 	
-func get_class(): 
+func get_class() -> String:
 	return "Rocket"
 	
 	
-func _process(_delta):
+func _process(_delta) -> void:
 	if launched == true:
 		var _collision = move_and_collide(Vector2(0,-1))
 		var local_pos = get_global_transform_with_canvas().get_origin()
@@ -20,7 +20,7 @@ func _process(_delta):
 			queue_free()
 			
 			
-func launch():
+func launch() -> void:
 	$Sprite.visible = false
 	$Animation.visible = true;
 	$Animation.play()
@@ -28,7 +28,7 @@ func launch():
 	add_to_group('inflight_rockets')
 	
 	
-func explode():
+func explode() -> void:
 	var points
 		# need to know if rocket was in flight or not
 	if launched == true:
@@ -40,5 +40,5 @@ func explode():
 	queue_free()
 	
 	
-func _on_VisibilityNotifier2D_screen_entered():
+func _on_VisibilityNotifier2D_screen_entered() -> void:
 	add_to_group('visible_rockets')

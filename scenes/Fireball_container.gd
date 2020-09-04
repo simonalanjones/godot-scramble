@@ -3,9 +3,9 @@ extends Node2D
 const MAX_SPAWN = 4
 const WAIT_CYCLES = 13
 
-onready var enabled = false
-onready var Fireball_scene = preload("res://scenes/Fireball.tscn")
-onready var timer = 0
+onready var enabled:bool = false
+onready var Fireball_scene: PackedScene = preload("res://scenes/Fireball.tscn")
+onready var timer:int = 0
 
 # contains a reference to the tilemap camera - injected by World.gd
 var camera_property
@@ -15,17 +15,17 @@ func get_camera_position() -> Vector2:
 	return camera_property.call_func()
 	
 
-func enable():
+func enable() -> void:
 	enabled = true
 
 	
-func disable():
+func disable() -> void:
 	enabled = false
 	for fireball in get_children():
 		fireball.queue_free()
 		
 		
-func _process(_delta):
+func _process(_delta) -> void:
 	if enabled == true:
 		timer += 1
 		if timer > WAIT_CYCLES and get_child_count() <= MAX_SPAWN:
@@ -33,7 +33,7 @@ func _process(_delta):
 			spawn_fireball()
 		
 		
-func spawn_fireball():
+func spawn_fireball() -> void:
 		var fireball = Fireball_scene.instance()
 		#calc y position
 		randomize()
