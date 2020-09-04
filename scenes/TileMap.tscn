@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://scripts/HUD.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Colour_manager.gd" type="Script" id=2]
@@ -29,6 +29,7 @@
 [ext_resource path="res://scripts/Mystery_container.gd" type="Script" id=27]
 [ext_resource path="res://scripts/Bullet_container.gd" type="Script" id=28]
 [ext_resource path="res://scripts/Explosion_container.gd" type="Script" id=29]
+[ext_resource path="res://scripts/Bomb_container.gd" type="Script" id=30]
 [ext_resource path="res://shaders/Ground_target_explosion.shader" type="Shader" id=31]
 
 [sub_resource type="ShaderMaterial" id=1]
@@ -281,7 +282,8 @@ __meta__ = {
 [node name="Bullet_container" type="Node" parent="."]
 script = ExtResource( 28 )
 
-[node name="Bombs" type="Node" parent="."]
+[node name="Bomb_container" type="Node" parent="."]
+script = ExtResource( 30 )
 
 [node name="Pause" type="Node" parent="."]
 pause_mode = 2

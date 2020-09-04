@@ -45,6 +45,7 @@ onready var Explosion_container = get_node("/root/World/Containers/Explosion_con
 onready var Base_container = get_node("/root/World/Containers/Base_container")
 
 onready var Bullet_container = get_node("/root/World/Bullet_container")
+onready var Bomb_container = get_node("/root/World/Bomb_container")
 
 onready var Tilemap = get_node("/root/World/Tilemap")
 
@@ -120,13 +121,11 @@ func _ready() -> void:
 	Input_manager.player_up = funcref(Ship, "move_up")
 	Input_manager.player_down = funcref(Ship, "move_down")	
 	Input_manager.player_enabled = funcref(Ship, "is_enabled")
-	
 	Input_manager.fire_bullet = funcref(Bullet_container, "fire_bullet")
-	
-	#Input_manager.bullet_spawn_position = funcref(Ship, "get_bullet_spawn_position")
-	#Input_manager.rocket_spawn_position = funcref(Ship, "get_rocket_spawn_position")
-	
+	Input_manager.fire_bomb = funcref(Bomb_container, "fire_bomb")
+		
 	Bullet_container.bullet_spawn_global_position = funcref(Ship, "bullet_spawn_position")
+	Bomb_container.bomb_spawn_global_position = funcref(Ship, "bomb_spawn_position")
 	
 
 	

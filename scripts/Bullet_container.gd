@@ -20,5 +20,3 @@ func fire_bullet():
 		bullet.position = spawn_position
 		add_child(bullet)
 		
-	
-	
