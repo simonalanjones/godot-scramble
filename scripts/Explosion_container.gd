@@ -5,8 +5,7 @@ extends Node2D
 # follow the colour changes of the landscape.
 # This has a shader attached which some scenes will inherit
 
-onready var Explosion_scene = preload("res://scenes/Explosion.tscn")
-
+var create_explosion: Reference
 
 func _ready():
 	# init colours before first colour swap
@@ -33,7 +32,7 @@ func spawn_explosion(object):
 	if not _class == "Mystery":
 		
 		# set up explosion position using the object's global position
-		var explosion_scene = Explosion_scene.instance()
+		var explosion_scene = create_explosion.call_func()
 		explosion_scene.position.x = object.global_position.x
 		explosion_scene.position.y = object.global_position.y
 		

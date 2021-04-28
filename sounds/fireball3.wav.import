@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/fireball3.wav-f313a9f83895dfa33a89973946ce13d2.sample"
+
+[deps]
+
+source_file="res://sounds/fireball3.wav"
+dest_files=[ "res://.import/fireball3.wav-f313a9f83895dfa33a89973946ce13d2.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

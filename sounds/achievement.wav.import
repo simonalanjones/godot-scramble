@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/achievement.wav-a235902a333c6cb274453427371ff83a.sample"
+
+[deps]
+
+source_file="res://sounds/achievement.wav"
+dest_files=[ "res://.import/achievement.wav-a235902a333c6cb274453427371ff83a.sample" ]
+
+[params]
+
+force/8_bit=true
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,41 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://scripts/Explosion.gd" type="Script" id=1]
+[ext_resource path="res://sprites/explosions/player_bomb_explosion/bomb_explodes4.png" type="Texture" id=2]
+[ext_resource path="res://sprites/explosions/player_bomb_explosion/bomb_explodes3.png" type="Texture" id=3]
+[ext_resource path="res://sprites/explosions/player_bomb_explosion/bomb_explodes1.png" type="Texture" id=4]
+[ext_resource path="res://sprites/explosions/player_bomb_explosion/bomb_explodes2.png" type="Texture" id=5]
+[ext_resource path="res://sprites/explosions/ufo_explosion/ufo_explosion_frame3.png" type="Texture" id=6]
+[ext_resource path="res://sprites/explosions/ufo_explosion/ufo_explosion_frame2.png" type="Texture" id=7]
+[ext_resource path="res://sprites/explosions/ufo_explosion/ufo_explosion_frame4.png" type="Texture" id=8]
+[ext_resource path="res://sprites/explosions/ground_target_explosion/explosion_frame1_shader.png" type="Texture" id=9]
+[ext_resource path="res://sprites/explosions/ground_target_explosion/explosion_frame4_shader.png" type="Texture" id=10]
+[ext_resource path="res://sprites/explosions/ground_target_explosion/explosion_frame2_shader.png" type="Texture" id=11]
+[ext_resource path="res://sprites/explosions/ufo_explosion/ufo_explosion_frame1.png" type="Texture" id=12]
+[ext_resource path="res://sprites/explosions/ground_target_explosion/explosion_frame3_shader.png" type="Texture" id=13]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 9 ), ExtResource( 11 ), ExtResource( 13 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 12 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "ufo",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 3 ), ExtResource( 2 ) ],
+"loop": true,
+"name": "bomb",
+"speed": 5.0
+} ]
+
+[node name="Explode_animation" type="AnimatedSprite"]
+use_parent_material = true
+frames = SubResource( 1 )
+animation = "bomb"
+centered = false
+script = ExtResource( 1 )
+[connection signal="animation_finished" from="." to="." method="_on_Explode_animation_animation_finished"]

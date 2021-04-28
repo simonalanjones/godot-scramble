@@ -2,58 +2,63 @@ extends Node
 
 signal colours_did_change
 
-const GREEN = Color(0.11,0.76,0)
-const PURPLE = Color(0.52,0,0.85)
-const RED = Color(0.87,0,0)
-const LIGHT_BLUE = Color(0,0.76,0.85)
-const DARK_BLUE = Color(0,0,0.85)
-const YELLOW = Color(0.87,0.87,0)
-const PINK = Color(0.88,0,0.85)
-const BLUE_HAZE = Color(0.76,0.76,0.85)
-const SILVER = Color(0.75,0.75,0.75)
-const GREY = Color(0.5,0.5,0.5)
-const DARK_GREY = Color(0.25,0.25,0.25)
-const BLACK = Color(0,0,0)
-const WHITE = Color(1,1,1)
+const MAX_COLOUR_CHANGES = 7
+const SECONDS_BETWEEN_CHANGES = 9
+const WAIT_CYCLES_BETWEEN_FLASHES = 3
 
-var colour_timer:float = 0
-var colour_counter:int = 0
+var colour_change_elapsed_time:float
+var colour_change_counter: int
 
-var flash_counter:int = 0
-var flash_effect:bool = false
-var enabled:bool = true
+var flash_counter: int
+var flash_effect: bool
+var enabled: bool
 
-func _process(delta):
+
+func init():
+	colour_change_elapsed_time = 0
+	flash_counter = 0
+	flash_effect = false
+	enabled = false
+	colour_change_counter = 1 # start on first colour
+	
+	
+func _process(delta: float) -> void:
 	if enabled == true:
 		if flash_effect == true:
 			flash_counter += 1
-			if flash_counter == 3:
+			if flash_counter == WAIT_CYCLES_BETWEEN_FLASHES:
 				change_colour()
 				flash_counter = 0
 		else:
-			colour_timer += delta
-			if colour_timer > 3:
-				colour_timer = 0
+			colour_change_elapsed_time += delta
+			if colour_change_elapsed_time >= SECONDS_BETWEEN_CHANGES:
+				colour_change_elapsed_time = 0
 				change_colour()
 
 
-func disable():
+func disable() -> void:
+	colour_change_elapsed_time = 0
+	colour_change_counter = 1
 	enabled = false
 	
-func enable():
+	
+func enable() -> void:
+	colour_change_elapsed_time = 0
+	colour_change_counter = 1
 	enabled = true
 	
 	
-func flash_colours():
+func flash_colours() -> void:
 	flash_effect = true
 
 
-func clear_flash_colours():
+func clear_flash_colours() -> void:
 	flash_effect = false
+	colour_change_counter = 1
+	VisualServer.set_default_clear_color("000000")
 	
 	
-func change_colours(fill_colour,outline_colour,third_colour,background_colour):
-	#if crash_state == false:
+func change_colours(fill_colour,outline_colour,third_colour,background_colour) -> void:
 	VisualServer.set_default_clear_color(background_colour) 
 	
 	var new_colours = { 
@@ -65,17 +70,17 @@ func change_colours(fill_colour,outline_colour,third_colour,background_colour):
 	emit_signal("colours_did_change", new_colours)
 	
 	
-func change_colour():
-	colour_counter += 1
-	if colour_counter > 7:
-		colour_counter = 1
+func change_colour() -> void:
+	colour_change_counter += 1
+	if colour_change_counter > MAX_COLOUR_CHANGES:
+		colour_change_counter = 1
 		
-	match colour_counter:
+	match colour_change_counter:
 		
-		1:	change_colours(PINK, BLUE_HAZE, RED,"000000")
-		2:	change_colours(DARK_BLUE, YELLOW, RED,"000000")
-		3:	change_colours(PURPLE, RED, DARK_BLUE,"000000")
-		4:	change_colours(GREEN, RED, PINK, "100a43")
-		5:	change_colours(PINK, YELLOW, GREEN, "100a43")
-		6: 	change_colours(RED, BLUE_HAZE, LIGHT_BLUE, "000000")
-		7: 	change_colours(RED, DARK_BLUE, YELLOW, "000000")
+		1:	change_colours(colours.pink, colours.blue_haze, colours.red, "000000")
+		2:	change_colours(colours.dark_blue, colours.yellow, colours.red, "000000")
+		3:	change_colours(colours.purple, colours.red, colours.dark_blue,"000000")
+		4:	change_colours(colours.green, colours.red, colours.pink, "100a43")
+		5:	change_colours(colours.pink, colours.yellow, colours.green, "100a43")
+		6: 	change_colours(colours.red, colours.blue_haze, colours.light_blue, "000000")
+		7: 	change_colours(colours.red, colours.dark_blue, colours.yellow, "000000")

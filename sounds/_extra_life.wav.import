@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/_extra_life.wav-9e72085dee78b3b1f391fd65d7ced98b.sample"
+
+[deps]
+
+source_file="res://sounds/_extra_life.wav"
+dest_files=[ "res://.import/_extra_life.wav-9e72085dee78b3b1f391fd65d7ced98b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

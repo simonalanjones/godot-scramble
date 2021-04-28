@@ -3,7 +3,10 @@ extends Node2D
 signal base_was_hit
 signal mission_completed
 
-onready var Base_scene:PackedScene = preload("res://scenes/Base.tscn")
+const TILE_SIZE = 8
+
+var create_base: Reference
+
 
 func _ready() -> void:
 	# init colours before next colour swap
@@ -13,9 +16,9 @@ func _ready() -> void:
 	
 	
 func add_base(position: Vector2) -> void:
-	var base = Base_scene.instance()
-	base.connect("base_hit", self, "_on_base_hit")
-	base.position = position * 8 # upscale from tilemap to bitmap
+	var base = create_base.call_func()
+	base.connect("base_hit", self, "on_base_hit")
+	base.position = position * TILE_SIZE # upscale from tilemap to bitmap
 	add_child(base)
 		
 		
@@ -24,8 +27,9 @@ func remove_base() -> void:
 		child.queue_free()
 		
 			
-func _on_base_hit(points: int) -> void:
+func on_base_hit(points: int) -> void:
 	emit_signal("base_was_hit", points)
+	yield(get_tree().create_timer(1.5), "timeout")
 	emit_signal("mission_completed")
 		
 		

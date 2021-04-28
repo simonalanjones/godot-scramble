@@ -3,9 +3,13 @@
 ## It is also a proxy for propogating the "hit" signal which relays the points
 
 extends Node2D
-
 signal mystery_was_hit
-onready var Mystery_scene: PackedScene = preload("res://scenes/Mystery.tscn")
+signal points_awarded
+signal ground_target_destroyed
+
+const TILE_SIZE = 8
+var create_mystery: Reference
+var explode_sound: Reference
 
 func _ready() -> void:
 	# init colours before next colour swap
@@ -15,14 +19,21 @@ func _ready() -> void:
 	
 
 func add_mystery(position: Vector2) -> void:
-	var mystery = Mystery_scene.instance()
+	var mystery = create_mystery.call_func()
 	mystery.connect("mystery_hit", self, "_on_mystery_hit")
-	mystery.position = position * 8 # upscale from tilemap to bitmap
+	mystery.position = position * TILE_SIZE # upscale from tilemap to bitmap
 	add_child(mystery)
 	
-		
-func _on_mystery_hit(points: int) -> void:
-	emit_signal("mystery_was_hit",points)
+	
+# mystery doesn't have an explosion sprite, the points show instead		
+func _on_mystery_hit(points: int, mystery: StaticBody2D, projectile: KinematicBody2D) -> void:
+	#print('points:' + str(points))
+	#print('projectile:' + str(projectile.get_class()))
+	#print('target hit:' + str(mystery))
+	emit_signal("mystery_was_hit", points, projectile)
+	emit_signal("points_awarded", points)
+	emit_signal("ground_target_destroyed", mystery.get_class(), projectile.get_class())
+	explode_sound.call_func()
 	
 	
 func change_colours(colours) -> void:

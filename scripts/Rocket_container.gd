@@ -1,9 +1,23 @@
 extends Node2D
 
 signal rocket_was_hit
+signal points_awarded
+signal ground_target_destroyed
 
-onready var Rocket_scene:PackedScene = preload("res://scenes/Rocket_k2d.tscn")
-onready var launch_enabled:bool = true
+# references to functions we will need to use
+var create_rocket: Reference
+var rocket_takeoff_sound: Reference
+var spawn_explosion: Reference
+
+# levels 2 & 3 don't launch rockets
+var launch_enabled: bool = true
+
+# rockets launch within a specific x range
+const MIN_LAUNCH_X = 50
+const MAX_LAUNCH_X = 100
+
+const MAX_INFLIGHT_ROCKETS = 2
+const TILE_SIZE = 8
 
 
 func _ready() -> void:
@@ -14,21 +28,17 @@ func _ready() -> void:
 
 	
 func add_rocket(position: Vector2) -> void:
-	var rocket = Rocket_scene.instance()
+	var rocket = create_rocket.call_func()
 	rocket.connect("rocket_hit", self, "_on_rocket_hit")
-	rocket.position = position * 8 # upscale from tilemap to bitmap
+	rocket.connect("rocket_exited_screen", self, "_on_rocket_exited_screen")
+	rocket.position = position * TILE_SIZE # upscale from tilemap to bitmap
 	add_child(rocket)
-	
-	
-func remove_rockets() -> void:
-	for child in get_children():
-		child.queue_free()
 		
 		
 func enable_rockets() -> void:
 	launch_enabled = true
 	
-	
+# levels 2 & 3 don't launch rockets
 func disable_rockets() -> void:
 	launch_enabled = false
 	
@@ -40,19 +50,28 @@ func _process(_delta) -> void:
 		
 func launch_next_rocket() -> void:
 	var visible_rockets = get_tree().get_nodes_in_group("visible_rockets")
-	if get_tree().get_nodes_in_group("inflight_rockets").size() < 2:
+	if get_tree().get_nodes_in_group("inflight_rockets").size() < MAX_INFLIGHT_ROCKETS:
 		for rocket in visible_rockets:
 			if not rocket.is_in_group("inflight_rockets"):
 				var local_pos = rocket.get_global_transform_with_canvas().get_origin()
-				if local_pos.x > 50 and local_pos.x < 100:
+				if local_pos.x > MIN_LAUNCH_X and local_pos.x < MAX_LAUNCH_X:
 					rocket.launch()
+					rocket_takeoff_sound.call_func()
 					
 					
-func _on_rocket_hit(points: int) -> void:
-	emit_signal("rocket_was_hit",points)
-		
-		
+func _on_rocket_hit(points: int, rocket: KinematicBody2D, projectile: KinematicBody2D) -> void:
+	spawn_explosion.call_func(rocket)
+	emit_signal("rocket_was_hit", points, projectile)
+	emit_signal("points_awarded", points)
+	emit_signal("ground_target_destroyed", rocket.get_class(), projectile.get_class())
+	rocket.queue_free()
+	
+	
+func _on_rocket_exited_screen(rocket: KinematicBody2D) -> void:
+	rocket.queue_free()
+	
+	
 func change_colours(colours) -> void:
 	get_material().set_shader_param("fill", colours["third_colour"])
-	get_material().set_shader_param("outline", colours["outline_colour"])	
+	get_material().set_shader_param("outline", colours["outline_colour"])
 	get_material().set_shader_param("thrust", colours["fill_colour"])

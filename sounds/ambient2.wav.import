@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/ambient2.wav-fb2b8bae649e88e3a3752c51d2eccc27.sample"
+
+[deps]
+
+source_file="res://sounds/ambient2.wav"
+dest_files=[ "res://.import/ambient2.wav-fb2b8bae649e88e3a3752c51d2eccc27.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=true
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=true
+compress/mode=0

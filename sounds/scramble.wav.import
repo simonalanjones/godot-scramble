@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/scramble.wav-57f8fba7b259c38feb8bc4c3ec69765e.sample"
+
+[deps]
+
+source_file="res://sounds/scramble.wav"
+dest_files=[ "res://.import/scramble.wav-57f8fba7b259c38feb8bc4c3ec69765e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=true
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=true
+edit/loop=false
+compress/mode=0
