@@ -2,7 +2,7 @@ Godot Scramble
 ==============
 Scramble written for Godot 3.1
 
-Godot Scramble is an accurate remake of the classic arcade game from 1981. Written in GD script for the Godot game engine. For this game I implemented my own state machine to make the many phases of the game easier to manage. I also poured over the original [assembly language](https://seanriddle.com/scramble.asm) code to understand how the game actually worked.
+Godot Scramble is an accurate remake of the classic arcade game from 1981. Written in GD script for the Godot game engine. For this game I implemented my own state machine to make the many phases of the game easier to manage. I also poured over the original [assembly language](https://seanriddle.com/scramble.asm) code to understand how the game actually worked and extracted the landscape/maze layouts.
 
 
 
