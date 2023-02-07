@@ -6,6 +6,7 @@ Scramble arcade game for the Godot game engine
 <br/>
   
 ### Highscores
+Just like in the original game it tracks the top scores
 <div><img align="center" src='https://github.com/simonalanjones/simonalanjones.github.io/blob/master/scramble-highscores.PNG' /></div>
 
 ### Achievements
