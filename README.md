@@ -2,7 +2,7 @@
 Scramble arcade game for the Godot game engine
 
 ### Gameplay
-During the attaract mode I made my game actually look like it was playing itself.
+During the attract mode I made my game actually look like it was playing itself.
 <div><img align="center" src='https://github.com/simonalanjones/simonalanjones.github.io/blob/master/scramble-game.PNG' /></div>
 
 ### Highscores
