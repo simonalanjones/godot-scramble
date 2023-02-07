@@ -7,3 +7,7 @@ Scramble arcade game for the Godot game engine
   
 ### Highscores
 <div><img align="center" src='https://github.com/simonalanjones/simonalanjones.github.io/blob/master/scramble-highscores.PNG' /></div>
+
+### Achievements
+<div><img align="center" src='https://github.com/simonalanjones/simonalanjones.github.io/blob/master/scramble-achievement.PNG' /></div>
+
