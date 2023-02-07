@@ -11,6 +11,8 @@ Godot Scramble is an accurate remake of the classic arcade game from 1981. Writt
 * Attract mode
 * Tope 10 high score save system
 
+## Screenshots
+
 ### Gameplay
 During the attract mode I made my game actually look like it was playing itself.
 <div><img align="center" src='https://github.com/simonalanjones/simonalanjones.github.io/blob/master/scramble-game.PNG' /></div>
