@@ -9,5 +9,6 @@ Scramble arcade game for the Godot game engine
 <div><img align="center" src='https://github.com/simonalanjones/simonalanjones.github.io/blob/master/scramble-highscores.PNG' /></div>
 
 ### Achievements
+Not in the original arcade game but I've added Xbox style achievements which you can unlock as you improve
 <div><img align="center" src='https://github.com/simonalanjones/simonalanjones.github.io/blob/master/scramble-achievement.PNG' /></div>
 
