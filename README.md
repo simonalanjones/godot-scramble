@@ -2,7 +2,7 @@
 Scramble arcade game for the Godot game engine
 
 ### Gameplay
-During the attaract mode I made my game actually look like it was playing itself. I recorded my own keystrokes and fed them back into the ship controller.
+During the attaract mode I made my game actually look like it was playing itself.
 <div><img align="center" src='https://github.com/simonalanjones/simonalanjones.github.io/blob/master/scramble-game.PNG' /></div>
 
 ### Highscores
