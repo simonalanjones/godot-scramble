@@ -1,5 +1,15 @@
-# godot-scramble
-Scramble arcade game for the Godot game engine
+Godot Scramble
+==============
+Scramble written for Godot 3.1
+
+Godot Scramble is an accurate remake of the classic arcade game from 1981. Written in GD script for the Godot game engine. 
+
+**Features**
+
+* Pixel perfect sprites from the original game
+* Achievements system in the style of Xbox/Steam
+* Attract mode
+* Tope 10 high score save system
 
 ### Gameplay
 During the attract mode I made my game actually look like it was playing itself.
